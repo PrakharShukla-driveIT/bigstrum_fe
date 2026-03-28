@@ -38,7 +38,7 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="relative py-24 lg:py-36 bg-background">
+    <section id="contact" className="relative py-16 sm:py-24 lg:py-36 bg-background">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
         {/* Section label */}
@@ -47,7 +47,7 @@ export function ContactSection() {
           <div data-divider className="flex-1 h-px bg-foreground/10" />
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-20">
 
           {/* Left */}
           <div
@@ -117,7 +117,7 @@ export function ContactSection() {
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-8 lg:p-10 flex flex-col gap-5"
+                className="rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-6 sm:p-8 lg:p-10 flex flex-col gap-5"
               >
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-2">

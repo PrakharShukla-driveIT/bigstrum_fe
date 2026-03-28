@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
+import { Menu, X } from 'lucide-react';
 import { PillButton } from './pill-button';
 
 const NAV_LINKS = [
@@ -19,6 +20,7 @@ const GSAP_EASE = 'power3.out';
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   // GSAP pill hover refs
   const circleRefs  = useRef<Array<HTMLSpanElement | null>>([]);
@@ -30,6 +32,20 @@ export function Navigation() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Close mobile menu on scroll
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const close = () => setMobileOpen(false);
+    window.addEventListener('scroll', close, { passive: true, once: true });
+    return () => window.removeEventListener('scroll', close);
+  }, [mobileOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   // Layout GSAP circle timelines
   useEffect(() => {
@@ -91,233 +107,356 @@ export function Navigation() {
   };
 
   return (
-    <header
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        pointerEvents: 'none',
-        height: '80px',
-        overflow: 'visible',
-      }}
-    >
-
-      {/* ── Flat nav ── */}
-      <div
+    <>
+      <header
         style={{
-          position: 'absolute',
+          position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
+          zIndex: 50,
+          pointerEvents: 'none',
           height: '80px',
-          background: 'rgba(255,255,255,0.92)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderBottom: '1px solid rgba(26,24,22,0.06)',
-          opacity: isScrolled ? 0 : 1,
-          transform: isScrolled
-            ? 'scaleX(0.82) scaleY(0.7) translateY(-6px)'
-            : 'scaleX(1) scaleY(1) translateY(0)',
-          transformOrigin: 'center top',
-          pointerEvents: isScrolled ? 'none' : 'auto',
-          transition: `opacity 300ms ${EASE}, transform 480ms ${EASE}`,
+          overflow: 'visible',
         }}
       >
+
+        {/* ── Flat nav ── */}
         <div
           style={{
-            maxWidth: '1400px',
-            margin: '0 auto',
-            padding: '0 40px',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '80px',
+            background: 'rgba(255,255,255,0.92)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            borderBottom: '1px solid rgba(26,24,22,0.06)',
+            opacity: isScrolled ? 0 : 1,
+            transform: isScrolled
+              ? 'scaleX(0.82) scaleY(0.7) translateY(-6px)'
+              : 'scaleX(1) scaleY(1) translateY(0)',
+            transformOrigin: 'center top',
+            pointerEvents: isScrolled ? 'none' : 'auto',
+            transition: `opacity 300ms ${EASE}, transform 480ms ${EASE}`,
           }}
         >
-        <a href="#" style={{ flexShrink: 0 }}>
-          <Image
-            src="/bigstrum.svg"
-            width={120}
-            height={30}
-            alt="Bigstrum"
-            priority
-            loading="eager"
+          <div
             style={{
-              filter: 'brightness(0) invert(20%) sepia(96%) saturate(730%) hue-rotate(322deg) brightness(88%)',
-              display: 'block',
-              height: 'auto',
+              maxWidth: '1400px',
+              margin: '0 auto',
+              padding: '0 20px',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              overflow: 'hidden',
             }}
-          />
-        </a>
+          >
+            <a href="#" style={{ flexShrink: 0 }}>
+              <Image
+                src="/bigstrum.svg"
+                width={120}
+                height={30}
+                alt="Bigstrum"
+                priority
+                loading="eager"
+                style={{
+                  filter: 'brightness(0) invert(20%) sepia(96%) saturate(730%) hue-rotate(322deg) brightness(88%)',
+                  display: 'block',
+                  height: 'auto',
+                }}
+              />
+            </a>
 
-        <nav style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: '32px' }}>
-          {NAV_LINKS.map((link) => (
+            {/* Desktop nav links */}
+            <nav style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: '24px' }} className="hidden lg:flex">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  style={{
+                    fontSize: '13px',
+                    fontFamily: 'monospace',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    textDecoration: 'none',
+                    color: 'rgba(26,24,22,0.6)',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = 'oklch(0.43 0.14 25)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,24,22,0.6)')}
+                >
+                  {link.name}
+                </a>
+              ))}
+            </nav>
+
+            <div className="hidden lg:block" style={{ flexShrink: 0, pointerEvents: 'auto' }}>
+              <PillButton
+                href="/book"
+                variant="primary"
+                style={{
+                  background: 'oklch(0.43 0.14 25)',
+                  color: '#fff',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  padding: '10px 20px',
+                  whiteSpace: 'nowrap',
+                  pointerEvents: 'auto',
+                }}
+              >
+                Book Consultation
+              </PillButton>
+            </div>
+
+            {/* Mobile hamburger */}
+            <button
+              className="lg:hidden"
+              onClick={() => setMobileOpen((v) => !v)}
+              style={{
+                marginLeft: 'auto',
+                pointerEvents: 'auto',
+                width: '40px',
+                height: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'rgba(26,24,22,0.7)',
+                flexShrink: 0,
+              }}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+
+        {/* ── Pill nav ── */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '80px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '4px',
+              background: '#ffffff',
+              borderRadius: '9999px',
+              boxShadow: '0 4px 32px rgba(0,0,0,0.12)',
+              maxWidth: 'calc(100vw - 32px)',
+              overflow: 'hidden',
+              opacity: isScrolled ? 1 : 0,
+              transform: isScrolled ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(-10px)',
+              pointerEvents: isScrolled ? 'auto' : 'none',
+              transition: `opacity 350ms ${EASE} 180ms, transform 500ms ${SPRING} 180ms`,
+            }}
+          >
+            {/* Logo pill */}
+            <a
+              href="#"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '7px 14px',
+                borderRadius: '9999px',
+                background: '#f0ede8',
+                flexShrink: 0,
+                textDecoration: 'none',
+              }}
+            >
+              <Image
+                src="/bigstrum.svg"
+                width={80}
+                height={20}
+                alt="Bigstrum"
+                style={{
+                  filter: 'brightness(0) invert(20%) sepia(96%) saturate(730%) hue-rotate(322deg) brightness(88%)',
+                  display: 'block',
+                  height: 'auto',
+                }}
+              />
+            </a>
+
+            {/* Nav pills with GSAP circle hover — desktop only */}
+            {NAV_LINKS.map((link, i) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onMouseEnter={() => handleEnter(i)}
+                onMouseLeave={() => handleLeave(i)}
+                className="hidden lg:inline-flex"
+                style={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '8px 16px',
+                  borderRadius: '9999px',
+                  background: '#f0ede8',
+                  color: '#1a1816',
+                  fontSize: '12px',
+                  fontFamily: 'monospace',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                  lineHeight: 0,
+                }}
+              >
+                {/* Expanding circle */}
+                <span
+                  ref={(el) => { circleRefs.current[i] = el; }}
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute',
+                    left: '50%',
+                    bottom: 0,
+                    borderRadius: '50%',
+                    background: '#8b2a2a',
+                    zIndex: 1,
+                    display: 'block',
+                    pointerEvents: 'none',
+                  }}
+                />
+                {/* Label stack */}
+                <span style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}>
+                  <span
+                    className="pill-label"
+                    style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}
+                  >
+                    {link.name}
+                  </span>
+                  <span
+                    className="pill-label-hover"
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      top: 0,
+                      display: 'inline-block',
+                      color: '#ffffff',
+                      zIndex: 3,
+                    }}
+                  >
+                    {link.name}
+                  </span>
+                </span>
+              </a>
+            ))}
+
+            {/* Mobile hamburger in pill nav */}
+            <button
+              className="lg:hidden"
+              onClick={() => setMobileOpen((v) => !v)}
+              style={{
+                width: '36px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#f0ede8',
+                border: 'none',
+                borderRadius: '9999px',
+                cursor: 'pointer',
+                color: 'rgba(26,24,22,0.7)',
+                flexShrink: 0,
+              }}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X size={16} /> : <Menu size={16} />}
+            </button>
+          </div>
+        </div>
+
+      </header>
+
+      {/* ── Mobile menu overlay ── */}
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 48,
+          background: 'rgba(255,255,255,0.97)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          opacity: mobileOpen ? 1 : 0,
+          pointerEvents: mobileOpen ? 'auto' : 'none',
+          transition: `opacity 250ms ${EASE}`,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: '80px 32px 48px',
+        }}
+      >
+        <nav style={{ display: 'flex', flexDirection: 'column' }}>
+          {NAV_LINKS.map((link, i) => (
             <a
               key={link.href}
               href={link.href}
+              onClick={() => setMobileOpen(false)}
               style={{
-                fontSize: '13px',
-                fontFamily: 'monospace',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
+                fontFamily: 'var(--font-display, serif)',
+                fontSize: 'clamp(1.6rem, 8vw, 2.25rem)',
+                color: 'rgba(26,24,22,0.85)',
                 textDecoration: 'none',
-                color: 'rgba(26,24,22,0.6)',
-                whiteSpace: 'nowrap',
+                padding: '14px 0',
+                borderBottom: '1px solid rgba(26,24,22,0.07)',
+                opacity: mobileOpen ? 1 : 0,
+                transform: mobileOpen ? 'translateY(0)' : 'translateY(16px)',
+                transition: `opacity 320ms ${EASE} ${i * 55 + 80}ms, transform 400ms ${EASE} ${i * 55 + 80}ms`,
+                display: 'block',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'oklch(0.43 0.14 25)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,24,22,0.6)')}
             >
               {link.name}
             </a>
           ))}
         </nav>
 
-        <PillButton
-          href="/book"
-          variant="primary"
-          style={{
-            flexShrink: 0,
-            background: 'oklch(0.43 0.14 25)',
-            color: '#fff',
-            fontSize: '13px',
-            fontWeight: 500,
-            padding: '10px 20px',
-            whiteSpace: 'nowrap',
-            pointerEvents: 'auto',
-          }}
-        >
-          Book Consultation
-        </PillButton>
-        </div>
-      </div>
-
-      {/* ── Pill nav ── */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '80px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          pointerEvents: 'none',
-        }}
-      >
         <div
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '4px',
-            padding: '4px',
-            background: '#ffffff',
-            borderRadius: '9999px',
-            boxShadow: '0 4px 32px rgba(0,0,0,0.12)',
-            opacity: isScrolled ? 1 : 0,
-            transform: isScrolled ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(-10px)',
-            pointerEvents: isScrolled ? 'auto' : 'none',
-            transition: `opacity 350ms ${EASE} 180ms, transform 500ms ${SPRING} 180ms`,
+            marginTop: '36px',
+            opacity: mobileOpen ? 1 : 0,
+            transform: mobileOpen ? 'translateY(0)' : 'translateY(16px)',
+            transition: `opacity 320ms ${EASE} 420ms, transform 400ms ${EASE} 420ms`,
           }}
         >
-          {/* Logo pill */}
           <a
-            href="#"
+            href="/book"
+            onClick={() => setMobileOpen(false)}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '7px 14px',
+              background: 'oklch(0.43 0.14 25)',
+              color: '#fff',
+              fontSize: '14px',
+              fontWeight: 500,
+              padding: '14px 32px',
               borderRadius: '9999px',
-              background: '#f0ede8',
-              flexShrink: 0,
               textDecoration: 'none',
             }}
           >
-            <Image
-              src="/bigstrum.svg"
-              width={80}
-              height={20}
-              alt="Bigstrum"
-              style={{
-                filter: 'brightness(0) invert(20%) sepia(96%) saturate(730%) hue-rotate(322deg) brightness(88%)',
-                display: 'block',
-                height: 'auto',
-              }}
-            />
+            Book Consultation
           </a>
-
-          {/* Nav pills with GSAP circle hover */}
-          {NAV_LINKS.map((link, i) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onMouseEnter={() => handleEnter(i)}
-              onMouseLeave={() => handleLeave(i)}
-              style={{
-                position: 'relative',
-                overflow: 'hidden',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '8px 16px',
-                borderRadius: '9999px',
-                background: '#f0ede8',
-                color: '#1a1816',
-                fontSize: '12px',
-                fontFamily: 'monospace',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                whiteSpace: 'nowrap',
-                cursor: 'pointer',
-                lineHeight: 0,
-              }}
-            >
-              {/* Expanding circle */}
-              <span
-                ref={(el) => { circleRefs.current[i] = el; }}
-                aria-hidden="true"
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  bottom: 0,
-                  borderRadius: '50%',
-                  background: '#8b2a2a',
-                  zIndex: 1,
-                  display: 'block',
-                  pointerEvents: 'none',
-                }}
-              />
-              {/* Label stack */}
-              <span style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}>
-                <span
-                  className="pill-label"
-                  style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}
-                >
-                  {link.name}
-                </span>
-                <span
-                  className="pill-label-hover"
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    display: 'inline-block',
-                    color: '#ffffff',
-                    zIndex: 3,
-                  }}
-                >
-                  {link.name}
-                </span>
-              </span>
-            </a>
-          ))}
         </div>
       </div>
-
-    </header>
+    </>
   );
 }

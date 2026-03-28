@@ -36,10 +36,10 @@ export function FooterSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
         {/* Main footer content */}
-        <div className="py-16 lg:py-20 grid grid-cols-2 md:grid-cols-6 gap-12 lg:gap-8">
+        <div className="py-12 lg:py-20 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 lg:gap-8">
 
           {/* Brand column */}
-          <div className="col-span-2 flex flex-col gap-6">
+          <div className="col-span-2 sm:col-span-3 md:col-span-2 flex flex-col gap-6">
             <a href="#" className="inline-flex items-center">
               <Image
                 src="/bigstrum.svg"

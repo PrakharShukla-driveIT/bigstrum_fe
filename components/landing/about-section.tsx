@@ -25,7 +25,7 @@ export function AboutSection() {
   const bottom = useInView();
 
   return (
-    <section id="about" className="relative py-24 lg:py-36 bg-primary">
+    <section id="about" className="relative py-16 sm:py-24 lg:py-36 bg-primary">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
         {/* Section label */}
@@ -37,7 +37,7 @@ export function AboutSection() {
         {/* Header */}
         <div
           ref={header.ref}
-          className={`grid lg:grid-cols-12 gap-8 mb-20 transition-all duration-700 ${
+          className={`grid lg:grid-cols-12 gap-6 lg:gap-8 mb-12 lg:mb-20 transition-all duration-700 ${
             header.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
@@ -56,7 +56,7 @@ export function AboutSection() {
         {/* Mission + Vision */}
         <div
           ref={cards.ref}
-          className="grid md:grid-cols-2 gap-6 mb-20"
+          className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-12 lg:mb-20"
         >
           {[
             {
@@ -76,7 +76,7 @@ export function AboutSection() {
           ].map(({ icon: Icon, label, title, body, delay }) => (
             <div
               key={label}
-              className={`rounded-2xl border border-white/15 bg-white/[0.06] p-8 lg:p-10 flex flex-col gap-5 hover:bg-white/[0.09] transition-all duration-500 ${
+              className={`rounded-2xl border border-white/15 bg-white/[0.06] p-6 sm:p-8 lg:p-10 flex flex-col gap-5 hover:bg-white/[0.09] transition-all duration-500 ${
                 cards.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               }`}
               style={{ transitionDelay: `${delay}ms` }}
@@ -99,7 +99,7 @@ export function AboutSection() {
           className={`transition-all duration-700 ${bottom.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
         >
           <h3 className="font-mono text-sm tracking-[0.2em] text-white/60 uppercase mb-8">Why Bigstrum</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {[
               {
                 icon: Users,

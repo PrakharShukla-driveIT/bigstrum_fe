@@ -26,12 +26,12 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       <Navigation />
 
       {/* ── Hero ── */}
-      <section className="relative bg-primary overflow-hidden pt-36 pb-24 lg:pt-48 lg:pb-32">
+      <section className="relative bg-primary overflow-hidden pt-28 pb-14 sm:pt-36 sm:pb-20 lg:pt-48 lg:pb-32">
         {/* Large ghost number */}
         <span
           aria-hidden="true"
           className="pointer-events-none select-none absolute right-0 top-1/2 -translate-y-1/2 font-display font-bold text-white/[0.04] leading-none"
-          style={{ fontSize: "clamp(12rem, 30vw, 26rem)" }}
+          style={{ fontSize: "clamp(6rem, 22vw, 26rem)" }}
         >
           {cs.number}
         </span>
@@ -71,14 +71,14 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       {/* ── Stat bar ── */}
       <div className="border-b border-foreground/8 bg-foreground/[0.01]">
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-foreground/8">
+          <div className="grid grid-cols-2 md:grid-cols-4">
             {[
               { label: "Industry",     value: cs.industry },
               { label: "Project Type", value: cs.type     },
               { label: "Year",         value: cs.year     },
               { label: "Stack",        value: `${cs.stack.length} technologies` },
-            ].map(({ label, value }) => (
-              <div key={label} className="px-6 py-5 first:pl-0 last:pr-0">
+            ].map(({ label, value }, i) => (
+              <div key={label} className={`px-4 sm:px-6 py-4 sm:py-5 ${i % 2 !== 0 ? 'border-l border-foreground/8' : ''} ${i >= 2 ? 'border-t border-foreground/8' : ''} md:border-t-0 ${i > 0 ? 'md:border-l md:border-foreground/8' : ''}`}>
                 <p className="font-mono text-[9px] tracking-widest text-foreground/35 uppercase mb-1">{label}</p>
                 <p className="text-sm font-medium text-foreground/80">{value}</p>
               </div>
@@ -88,8 +88,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       </div>
 
       {/* ── Body ── */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20 lg:py-28">
-        <div className="grid lg:grid-cols-12 gap-16 lg:gap-20">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-28">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
 
           {/* Main column */}
           <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-20">
@@ -220,22 +220,22 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       <div className="border-t border-foreground/8">
         <Link
           href={`/case-study/${nextCs.slug}`}
-          className="group block max-w-7xl mx-auto px-6 lg:px-10 py-14 lg:py-20"
+          className="group block max-w-7xl mx-auto px-6 lg:px-10 py-10 sm:py-14 lg:py-20"
         >
-          <div className="flex items-center justify-between gap-8">
-            <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-6">
+            <div className="flex flex-col gap-2 sm:gap-3 min-w-0">
               <p className="font-mono text-[10px] tracking-widest text-foreground/35 uppercase">Next Case Study</p>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <span className="font-mono text-xs text-foreground/30">{nextCs.number}</span>
                 <span className="text-foreground/20">·</span>
                 <span className="font-mono text-xs text-foreground/40">{nextCs.industry}</span>
               </div>
-              <h3 className="font-display text-2xl md:text-3xl lg:text-4xl text-foreground group-hover:text-primary transition-colors duration-300 max-w-xl">
+              <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground group-hover:text-primary transition-colors duration-300">
                 {nextCs.title}
               </h3>
             </div>
-            <div className="shrink-0 w-14 h-14 rounded-full border border-foreground/12 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/8 transition-all duration-300">
-              <ArrowRight className="w-5 h-5 text-foreground/30 group-hover:text-primary transition-colors duration-300" />
+            <div className="shrink-0 w-10 h-10 sm:w-14 sm:h-14 rounded-full border border-foreground/12 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/8 transition-all duration-300">
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-foreground/30 group-hover:text-primary transition-colors duration-300" />
             </div>
           </div>
         </Link>

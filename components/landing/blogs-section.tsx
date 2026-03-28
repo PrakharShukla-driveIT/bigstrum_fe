@@ -63,8 +63,8 @@ export function BlogsSection() {
   }, []);
 
   return (
-    <section id="articles" ref={sectionRef} className="relative bg-background flex flex-col min-h-screen overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex flex-col flex-1 py-10 lg:py-14">
+    <section id="articles" ref={sectionRef} className="relative bg-background flex flex-col lg:min-h-screen overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex flex-col flex-1 py-12 lg:py-14">
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-8 shrink-0">

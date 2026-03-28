@@ -221,7 +221,7 @@ export function AISection() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="ai" className="relative py-24 lg:py-36 bg-background border-t border-foreground/10">
+    <section ref={sectionRef} id="ai" className="relative py-16 sm:py-24 lg:py-36 bg-background border-t border-foreground/10">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
         {/* Section label */}
@@ -231,7 +231,7 @@ export function AISection() {
         </div>
 
         {/* Header */}
-        <div ref={headerRef} className="grid lg:grid-cols-12 gap-8 mb-16">
+        <div ref={headerRef} className="grid lg:grid-cols-12 gap-6 lg:gap-8 mb-10 lg:mb-16">
           <div className="lg:col-span-6">
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight text-foreground leading-[1.05]">
               AI built for production

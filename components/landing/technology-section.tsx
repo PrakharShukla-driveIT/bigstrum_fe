@@ -276,7 +276,7 @@ export function TechnologySection() {
   return (
     <section id="technology" className="relative bg-primary overflow-hidden">
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full py-16 lg:py-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full py-12 sm:py-16 lg:py-24">
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-12">
@@ -315,7 +315,7 @@ export function TechnologySection() {
 
       {/* ── Scrolling tech strip at bottom ── */}
       <div
-        className="mt-8 pb-8 -mx-6 lg:-mx-10 select-none pointer-events-none overflow-hidden"
+        className="mt-6 sm:mt-8 pb-6 sm:pb-8 -mx-6 lg:-mx-10 select-none pointer-events-none overflow-hidden"
         style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}
       >
         <div className="flex gap-3 marquee whitespace-nowrap mb-3">

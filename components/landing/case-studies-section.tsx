@@ -7,7 +7,7 @@ import { caseStudies } from "@/lib/case-studies-data";
 
 export function CaseStudiesSection() {
   return (
-    <section id="case-studies" className="relative pt-24 lg:pt-36 pb-[38vh] bg-primary" style={{ clipPath: 'inset(0)' }}>
+    <section id="case-studies" className="relative pt-16 sm:pt-24 lg:pt-36 pb-[30vh] lg:pb-[38vh] bg-primary" style={{ clipPath: 'inset(0)' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
         {/* Section label */}
@@ -22,7 +22,7 @@ export function CaseStudiesSection() {
         </div>
 
         {/* Header */}
-        <div className="grid lg:grid-cols-12 gap-8 mb-20">
+        <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 mb-10 lg:mb-20">
           <div className="lg:col-span-7">
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight text-white leading-[1.05]">
               Proven Solutions Across Industries
@@ -49,10 +49,10 @@ export function CaseStudiesSection() {
               key={cs.tag}
               itemClassName="border border-foreground/8 bg-background"
             >
-              <div className="grid lg:grid-cols-12 min-h-[560px]">
+              <div className="grid lg:grid-cols-12">
 
                 {/* Left — main content */}
-                <div className="lg:col-span-8 p-10 lg:p-14 flex flex-col gap-8 border-b lg:border-b-0 lg:border-r border-foreground/8">
+                <div className="lg:col-span-8 p-6 sm:p-8 lg:p-14 flex flex-col gap-6 lg:gap-8 border-b lg:border-b-0 lg:border-r border-foreground/8">
 
                   {/* Top row */}
                   <div className="flex items-center justify-between">
@@ -101,9 +101,9 @@ export function CaseStudiesSection() {
                 </div>
 
                 {/* Right — meta panel */}
-                <div className="lg:col-span-4 p-10 lg:p-14 flex flex-col justify-between bg-foreground/[0.015]">
+                <div className="lg:col-span-4 p-6 sm:p-8 lg:p-14 flex flex-col justify-between bg-foreground/[0.015]">
                   {/* Large number */}
-                  <p className="font-display text-[8rem] lg:text-[10rem] leading-none font-bold text-foreground opacity-[0.06] select-none -mt-2">
+                  <p className="font-display text-[5rem] lg:text-[10rem] leading-none font-bold text-foreground opacity-[0.06] select-none -mt-2">
                     {cs.number}
                   </p>
 

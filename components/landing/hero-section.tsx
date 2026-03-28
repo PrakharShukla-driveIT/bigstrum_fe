@@ -16,7 +16,7 @@ export function HeroSection() {
   return (
     <section data-gsap-hero className="relative min-h-screen flex flex-col overflow-hidden">
       {/* Animated sphere background */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] lg:w-[800px] lg:h-[800px] opacity-40 pointer-events-none">
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[220px] h-[220px] sm:w-[380px] sm:h-[380px] md:w-[500px] md:h-[500px] lg:w-[800px] lg:h-[800px] opacity-30 sm:opacity-40 pointer-events-none">
         <AnimatedSphere />
       </div>
 
@@ -38,7 +38,7 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div data-gsap-hero-content className="relative z-10 w-full px-6 lg:px-16 pt-28 lg:pt-36 pb-12 flex-1 flex flex-col justify-center">
+      <div data-gsap-hero-content className="relative z-10 w-full px-6 lg:px-16 pt-24 sm:pt-28 lg:pt-36 pb-12 flex-1 flex flex-col justify-center">
         <div className="max-w-2xl">
             {/* Eyebrow */}
             <div
@@ -80,7 +80,7 @@ export function HeroSection() {
 
             {/* CTAs */}
             <div
-              className={`flex flex-row items-center gap-4 mb-10 transition-all duration-700 delay-200 ${
+              className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-10 transition-all duration-700 delay-200 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
