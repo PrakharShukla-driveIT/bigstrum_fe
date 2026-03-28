@@ -1,141 +1,323 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
+import { gsap } from 'gsap';
+import { PillButton } from './pill-button';
 
-const navLinks = [
-  { name: "Services", href: "#services" },
-  { name: "Why Us", href: "#why-bigstrum" },
-  { name: "Contact", href: "#contact" },
+const NAV_LINKS = [
+  { name: 'Case Studies', href: '/#case-studies' },
+  { name: 'Insights',     href: '/#articles'     },
+  { name: 'Technology',   href: '/#technology'   },
+  { name: 'About',        href: '/#about'        },
+  { name: 'Contact',      href: '/#contact'      },
 ];
+
+const EASE   = 'cubic-bezier(0.4, 0, 0.2, 1)';
+const SPRING = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+const GSAP_EASE = 'power3.out';
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // GSAP pill hover refs
+  const circleRefs  = useRef<Array<HTMLSpanElement | null>>([]);
+  const tlRefs      = useRef<Array<gsap.core.Timeline | null>>([]);
+  const tweenRefs   = useRef<Array<gsap.core.Tween | null>>([]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 80);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Layout GSAP circle timelines
+  useEffect(() => {
+    const layout = () => {
+      circleRefs.current.forEach((circle) => {
+        if (!circle?.parentElement) return;
+
+        const pill = circle.parentElement as HTMLElement;
+        const { width: w, height: h } = pill.getBoundingClientRect();
+        const R      = ((w * w) / 4 + h * h) / (2 * h);
+        const D      = Math.ceil(2 * R) + 2;
+        const delta  = Math.ceil(R - Math.sqrt(Math.max(0, R * R - (w * w) / 4))) + 1;
+        const originY = D - delta;
+
+        circle.style.width  = `${D}px`;
+        circle.style.height = `${D}px`;
+        circle.style.bottom = `-${delta}px`;
+
+        gsap.set(circle, { xPercent: -50, scale: 0, transformOrigin: `50% ${originY}px` });
+
+        const label = pill.querySelector<HTMLElement>('.pill-label');
+        const hover = pill.querySelector<HTMLElement>('.pill-label-hover');
+
+        if (label) gsap.set(label, { y: 0 });
+        if (hover) gsap.set(hover, { y: Math.ceil(h + 100), opacity: 0 });
+
+        const idx = circleRefs.current.indexOf(circle);
+        if (idx === -1) return;
+
+        tlRefs.current[idx]?.kill();
+        const tl = gsap.timeline({ paused: true });
+
+        tl.to(circle, { scale: 1.2, xPercent: -50, duration: 2, ease: GSAP_EASE, overwrite: 'auto' }, 0);
+        if (label) tl.to(label, { y: -(h + 8), duration: 2, ease: GSAP_EASE, overwrite: 'auto' }, 0);
+        if (hover) tl.to(hover, { y: 0, opacity: 1, duration: 2, ease: GSAP_EASE, overwrite: 'auto' }, 0);
+
+        tlRefs.current[idx] = tl;
+      });
+    };
+
+    layout();
+    window.addEventListener('resize', layout);
+    document.fonts?.ready.then(layout).catch(() => {});
+    return () => window.removeEventListener('resize', layout);
+  }, []);
+
+  const handleEnter = (i: number) => {
+    const tl = tlRefs.current[i];
+    if (!tl) return;
+    tweenRefs.current[i]?.kill();
+    tweenRefs.current[i] = tl.tweenTo(tl.duration(), { duration: 0.3, ease: GSAP_EASE, overwrite: 'auto' });
+  };
+
+  const handleLeave = (i: number) => {
+    const tl = tlRefs.current[i];
+    if (!tl) return;
+    tweenRefs.current[i]?.kill();
+    tweenRefs.current[i] = tl.tweenTo(0, { duration: 0.2, ease: GSAP_EASE, overwrite: 'auto' });
+  };
 
   return (
     <header
-      className={`fixed z-50 transition-all duration-500 ${
-        isScrolled
-          ? "top-4 left-4 right-4"
-          : "top-0 left-0 right-0"
-      }`}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 50,
+        pointerEvents: 'none',
+        height: '80px',
+        overflow: 'visible',
+      }}
     >
-      <nav
-        className={`mx-auto transition-all duration-500 ${
-          isScrolled || isMobileMenuOpen
-            ? "bg-background/80 backdrop-blur-xl border border-foreground/10 rounded-2xl shadow-lg max-w-[1200px]"
-            : "bg-transparent max-w-[1400px]"
-        }`}
+
+      {/* ── Flat nav ── */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '80px',
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderBottom: '1px solid rgba(26,24,22,0.06)',
+          opacity: isScrolled ? 0 : 1,
+          transform: isScrolled
+            ? 'scaleX(0.82) scaleY(0.7) translateY(-6px)'
+            : 'scaleX(1) scaleY(1) translateY(0)',
+          transformOrigin: 'center top',
+          pointerEvents: isScrolled ? 'none' : 'auto',
+          transition: `opacity 300ms ${EASE}, transform 480ms ${EASE}`,
+        }}
       >
         <div
-          className={`flex items-center justify-between transition-all duration-500 px-6 lg:px-8 ${
-            isScrolled ? "h-14" : "h-20"
-          }`}
+          style={{
+            maxWidth: '1400px',
+            margin: '0 auto',
+            padding: '0 40px',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+          }}
         >
-          {/* Logo */}
-          <a href="#" className="flex items-center group">
-            <Image src="/bigstrum.svg" width={140} height={35} alt="Bigstrum logo" priority style={{ filter: "brightness(0) invert(20%) sepia(96%) saturate(730%) hue-rotate(322deg) brightness(88%)" }} />
-          </a>
+        <a href="#" style={{ flexShrink: 0 }}>
+          <Image
+            src="/bigstrum.svg"
+            width={120}
+            height={30}
+            alt="Bigstrum"
+            priority
+            loading="eager"
+            style={{
+              filter: 'brightness(0) invert(20%) sepia(96%) saturate(730%) hue-rotate(322deg) brightness(88%)',
+              display: 'block',
+              height: 'auto',
+            }}
+          />
+        </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-12">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm text-foreground/70 hover:text-foreground transition-colors duration-300 relative group"
-              >
-                {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
-          </div>
-
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-4">
-            <Button
-              size="sm"
-              className={`bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-all duration-500 ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
-              asChild
+        <nav style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: '32px' }}>
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              style={{
+                fontSize: '13px',
+                fontFamily: 'monospace',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                color: 'rgba(26,24,22,0.6)',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'oklch(0.43 0.14 25)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,24,22,0.6)')}
             >
-              <a href="#contact">Get in Touch</a>
-            </Button>
-          </div>
+              {link.name}
+            </a>
+          ))}
+        </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
-        </div>
-
-      </nav>
-
-      {/* Mobile Menu - Full Screen Overlay */}
-      <div
-        className={`md:hidden fixed inset-0 bg-background z-40 transition-all duration-500 ${
-          isMobileMenuOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-        style={{ top: 0 }}
-      >
-        <div className="flex flex-col h-full px-8 pt-28 pb-8">
-          {/* Navigation Links */}
-          <div className="flex-1 flex flex-col justify-center gap-8">
-            {navLinks.map((link, i) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-5xl font-display text-foreground hover:text-muted-foreground transition-all duration-500 ${
-                  isMobileMenuOpen
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4"
-                }`}
-                style={{ transitionDelay: isMobileMenuOpen ? `${i * 75}ms` : "0ms" }}
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-
-          {/* Bottom CTA */}
-          <div className={`flex gap-4 pt-8 border-t border-foreground/10 transition-all duration-500 ${
-            isMobileMenuOpen
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: isMobileMenuOpen ? "300ms" : "0ms" }}
-          >
-            <Button
-              className="flex-1 bg-primary text-primary-foreground rounded-full h-14 text-base"
-              onClick={() => setIsMobileMenuOpen(false)}
-              asChild
-            >
-              <a href="#contact">Get in Touch</a>
-            </Button>
-          </div>
+        <PillButton
+          href="/book"
+          variant="primary"
+          style={{
+            flexShrink: 0,
+            background: 'oklch(0.43 0.14 25)',
+            color: '#fff',
+            fontSize: '13px',
+            fontWeight: 500,
+            padding: '10px 20px',
+            whiteSpace: 'nowrap',
+            pointerEvents: 'auto',
+          }}
+        >
+          Book Consultation
+        </PillButton>
         </div>
       </div>
+
+      {/* ── Pill nav ── */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '80px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+        }}
+      >
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            padding: '4px',
+            background: '#ffffff',
+            borderRadius: '9999px',
+            boxShadow: '0 4px 32px rgba(0,0,0,0.12)',
+            opacity: isScrolled ? 1 : 0,
+            transform: isScrolled ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(-10px)',
+            pointerEvents: isScrolled ? 'auto' : 'none',
+            transition: `opacity 350ms ${EASE} 180ms, transform 500ms ${SPRING} 180ms`,
+          }}
+        >
+          {/* Logo pill */}
+          <a
+            href="#"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '7px 14px',
+              borderRadius: '9999px',
+              background: '#f0ede8',
+              flexShrink: 0,
+              textDecoration: 'none',
+            }}
+          >
+            <Image
+              src="/bigstrum.svg"
+              width={80}
+              height={20}
+              alt="Bigstrum"
+              style={{
+                filter: 'brightness(0) invert(20%) sepia(96%) saturate(730%) hue-rotate(322deg) brightness(88%)',
+                display: 'block',
+                height: 'auto',
+              }}
+            />
+          </a>
+
+          {/* Nav pills with GSAP circle hover */}
+          {NAV_LINKS.map((link, i) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onMouseEnter={() => handleEnter(i)}
+              onMouseLeave={() => handleLeave(i)}
+              style={{
+                position: 'relative',
+                overflow: 'hidden',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '8px 16px',
+                borderRadius: '9999px',
+                background: '#f0ede8',
+                color: '#1a1816',
+                fontSize: '12px',
+                fontFamily: 'monospace',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                lineHeight: 0,
+              }}
+            >
+              {/* Expanding circle */}
+              <span
+                ref={(el) => { circleRefs.current[i] = el; }}
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  bottom: 0,
+                  borderRadius: '50%',
+                  background: '#8b2a2a',
+                  zIndex: 1,
+                  display: 'block',
+                  pointerEvents: 'none',
+                }}
+              />
+              {/* Label stack */}
+              <span style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}>
+                <span
+                  className="pill-label"
+                  style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}
+                >
+                  {link.name}
+                </span>
+                <span
+                  className="pill-label-hover"
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    display: 'inline-block',
+                    color: '#ffffff',
+                    zIndex: 3,
+                  }}
+                >
+                  {link.name}
+                </span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
     </header>
   );
 }
