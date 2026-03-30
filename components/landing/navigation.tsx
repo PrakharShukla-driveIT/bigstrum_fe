@@ -153,7 +153,7 @@ export function Navigation() {
               overflow: 'hidden',
             }}
           >
-            <a href="#" style={{ flexShrink: 0 }}>
+            <a href="/" style={{ flexShrink: 0 }}>
               <Image
                 src="/bigstrum.svg"
                 width={120}
@@ -268,7 +268,7 @@ export function Navigation() {
           >
             {/* Logo pill */}
             <a
-              href="#"
+              href="/"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',

@@ -16,7 +16,10 @@ export function HeroSection() {
   return (
     <section data-gsap-hero className="relative min-h-screen flex flex-col overflow-hidden">
       {/* Animated sphere background */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[220px] h-[220px] sm:w-[380px] sm:h-[380px] md:w-[500px] md:h-[500px] lg:w-[800px] lg:h-[800px] opacity-30 sm:opacity-40 pointer-events-none">
+      <div
+        className="absolute right-0 top-1/2 -translate-y-1/2 opacity-30 sm:opacity-40 pointer-events-none"
+        style={{ width: 'min(80vh, 80vw)', height: 'min(80vh, 80vw)', maxWidth: '800px', maxHeight: '800px', minWidth: '220px', minHeight: '220px' }}
+      >
         <AnimatedSphere />
       </div>
 
@@ -48,7 +51,7 @@ export function HeroSection() {
             >
               <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground">
                 <span className="w-8 h-px bg-foreground/30" />
-                The platform for modern teams
+                The Platform for modern teams
               </span>
             </div>
 
@@ -59,11 +62,11 @@ export function HeroSection() {
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
               >
-                <span className="block text-foreground/80">The platform</span>
+                <span className="block text-foreground/80">The Platform</span>
                 <span className="flex items-center gap-[0.25em] flex-wrap">
-                  <span className="text-foreground/80">to</span>
+                  <span className="text-foreground/80">To</span>
                   <RotatingText
-                    texts={["build", "scale", "ship", "grow"]}
+                    texts={["Build", "Scale", "Ship", "Grow"]}
                     mainClassName="bg-primary text-primary-foreground overflow-hidden rounded-[0.35em] justify-center px-[0.25em] py-[0.01em]"
                     splitLevelClassName="overflow-hidden pb-[0.05em]"
                     staggerFrom="last"

@@ -7,7 +7,7 @@ import { caseStudies } from "@/lib/case-studies-data";
 
 export function CaseStudiesSection() {
   return (
-    <section id="case-studies" className="relative pt-16 sm:pt-24 lg:pt-36 pb-[30vh] lg:pb-[38vh] bg-primary" style={{ clipPath: 'inset(0)' }}>
+    <section id="case-studies" className="relative pt-16 sm:pt-24 lg:pt-36 pb-[40vh] lg:pb-[50vh] bg-primary overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
         {/* Section label */}
@@ -39,17 +39,17 @@ export function CaseStudiesSection() {
         <ScrollStack
           baseScale={0.88}
           itemScale={0.03}
-          itemStackDistance={28}
+          itemStackDistance={16}
           itemDistance={100}
-          stackPosition="20%"
-          scaleEndPosition="10%"
+          stackPosition="12%"
+          scaleEndPosition="6%"
         >
           {caseStudies.map((cs) => (
             <ScrollStackItem
               key={cs.tag}
               itemClassName="border border-foreground/8 bg-background"
             >
-              <div className="grid lg:grid-cols-12">
+              <div className="grid lg:grid-cols-12 min-h-[480px] lg:min-h-[520px]">
 
                 {/* Left — main content */}
                 <div className="lg:col-span-8 p-6 sm:p-8 lg:p-14 flex flex-col gap-6 lg:gap-8 border-b lg:border-b-0 lg:border-r border-foreground/8">

@@ -1,10 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 
 const RED = "#8B2020"
 
 export function LoadingScreen() {
+  const pathname = usePathname()
   const [phase, setPhase] = useState(0)
   // phase 0 = hidden
   // phase 1 = wordmark in
@@ -13,12 +15,13 @@ export function LoadingScreen() {
   // phase 4 = gone
 
   useEffect(() => {
+    setPhase(0)
     const t1 = setTimeout(() => setPhase(1), 50)
     const t2 = setTimeout(() => setPhase(2), 400)
     const t3 = setTimeout(() => setPhase(3), 1600)
     const t4 = setTimeout(() => setPhase(4), 2200)
     return () => [t1, t2, t3, t4].forEach(clearTimeout)
-  }, [])
+  }, [pathname])
 
   if (phase === 4) return null
 

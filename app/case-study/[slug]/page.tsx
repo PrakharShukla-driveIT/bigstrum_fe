@@ -37,6 +37,15 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         </span>
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+          {/* Back button */}
+          <Link
+            href="/#case-studies"
+            className="inline-flex items-center gap-2 mb-8 font-mono text-[11px] tracking-widest uppercase text-white/50 hover:text-white/90 transition-colors duration-200 group"
+          >
+            <ArrowLeft className="w-3 h-3 group-hover:-translate-x-0.5 transition-transform duration-200" />
+            All Case Studies
+          </Link>
+
           {/* Breadcrumb */}
           <div className="flex items-center gap-2.5 mb-10">
             <span className="font-mono text-[10px] tracking-widest uppercase text-white/40">{cs.number}</span>
