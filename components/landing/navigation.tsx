@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
 import { Menu, X } from 'lucide-react';
 import { PillButton } from './pill-button';
 
 const NAV_LINKS = [
-  { name: 'Case Studies', href: '/#case-studies' },
-  { name: 'Insights',     href: '/#articles'     },
-  { name: 'Technology',   href: '/#technology'   },
-  { name: 'About',        href: '/#about'        },
-  { name: 'Contact',      href: '/#contact'      },
+  { name: 'Case Studies', href: '#case-studies', sectionId: 'case-studies' },
+  { name: 'Insights',     href: '#articles',     sectionId: 'articles'     },
+  { name: 'Technology',   href: '#technology',   sectionId: 'technology'   },
+  { name: 'About',        href: '#about',        sectionId: 'about'        },
+  { name: 'Contact',      href: '#contact',      sectionId: 'contact'      },
 ];
 
 const EASE   = 'cubic-bezier(0.4, 0, 0.2, 1)';
@@ -21,6 +21,7 @@ const GSAP_EASE = 'power3.out';
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('hero');
 
   // GSAP pill hover refs
   const circleRefs  = useRef<Array<HTMLSpanElement | null>>([]);
@@ -28,17 +29,60 @@ export function Navigation() {
   const tweenRefs   = useRef<Array<gsap.core.Tween | null>>([]);
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 80);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const container = document.getElementById('snap-container');
+    if (!container) return;
+    const onScroll = () => setIsScrolled(container.scrollTop > 80);
+    container.addEventListener('scroll', onScroll, { passive: true });
+    return () => container.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Active section via IntersectionObserver on the explicit snap container
+  useEffect(() => {
+    const container = document.getElementById('snap-container');
+    if (!container) return;
+
+    const sectionIds = ['hero', 'case-studies', 'articles', 'technology', 'ai', 'about', 'contact'];
+    const observers: IntersectionObserver[] = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+            setActiveSection(id);
+          }
+        },
+        { root: container, threshold: [0.4] }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach((obs) => obs.disconnect());
+  }, []);
+
+  // Smooth scroll to section on nav click
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+      e.preventDefault();
+      const target = document.getElementById(sectionId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      setMobileOpen(false);
+    },
+    []
+  );
 
   // Close mobile menu on scroll
   useEffect(() => {
     if (!mobileOpen) return;
+    const container = document.getElementById('snap-container');
+    if (!container) return;
     const close = () => setMobileOpen(false);
-    window.addEventListener('scroll', close, { passive: true, once: true });
-    return () => window.removeEventListener('scroll', close);
+    container.addEventListener('scroll', close, { passive: true, once: true });
+    return () => container.removeEventListener('scroll', close);
   }, [mobileOpen]);
 
   // Prevent body scroll when mobile menu is open
@@ -170,26 +214,32 @@ export function Navigation() {
             </a>
 
             {/* Desktop nav links */}
-            <nav style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: '24px' }} className="hidden lg:flex">
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  style={{
-                    fontSize: '13px',
-                    fontFamily: 'monospace',
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    color: 'rgba(26,24,22,0.6)',
-                    whiteSpace: 'nowrap',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'oklch(0.43 0.14 25)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,24,22,0.6)')}
-                >
-                  {link.name}
-                </a>
-              ))}
+            <nav style={{ flex: 1, justifyContent: 'center', gap: '24px' }} className="hidden lg:flex">
+              {NAV_LINKS.map((link) => {
+                const isActive = activeSection === link.sectionId;
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.sectionId)}
+                    style={{
+                      fontSize: '13px',
+                      fontFamily: 'monospace',
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                      textDecoration: 'none',
+                      color: isActive ? 'oklch(0.43 0.14 25)' : 'rgba(26,24,22,0.6)',
+                      fontWeight: isActive ? 600 : 400,
+                      whiteSpace: 'nowrap',
+                      transition: 'color 200ms ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = 'oklch(0.43 0.14 25)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = isActive ? 'oklch(0.43 0.14 25)' : 'rgba(26,24,22,0.6)')}
+                  >
+                    {link.name}
+                  </a>
+                );
+              })}
             </nav>
 
             <div className="hidden lg:block" style={{ flexShrink: 0, pointerEvents: 'auto' }}>
@@ -212,16 +262,13 @@ export function Navigation() {
 
             {/* Mobile hamburger */}
             <button
-              className="lg:hidden"
+              className="lg:hidden flex items-center justify-center"
               onClick={() => setMobileOpen((v) => !v)}
               style={{
                 marginLeft: 'auto',
                 pointerEvents: 'auto',
                 width: '40px',
                 height: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
@@ -294,83 +341,85 @@ export function Navigation() {
             </a>
 
             {/* Nav pills with GSAP circle hover — desktop only */}
-            {NAV_LINKS.map((link, i) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onMouseEnter={() => handleEnter(i)}
-                onMouseLeave={() => handleLeave(i)}
-                className="hidden lg:inline-flex"
-                style={{
-                  position: 'relative',
-                  overflow: 'hidden',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '8px 16px',
-                  borderRadius: '9999px',
-                  background: '#f0ede8',
-                  color: '#1a1816',
-                  fontSize: '12px',
-                  fontFamily: 'monospace',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  textDecoration: 'none',
-                  whiteSpace: 'nowrap',
-                  cursor: 'pointer',
-                  lineHeight: 0,
-                }}
-              >
-                {/* Expanding circle */}
-                <span
-                  ref={(el) => { circleRefs.current[i] = el; }}
-                  aria-hidden="true"
+            {NAV_LINKS.map((link, i) => {
+              const isActive = activeSection === link.sectionId;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.sectionId)}
+                  onMouseEnter={() => handleEnter(i)}
+                  onMouseLeave={() => handleLeave(i)}
+                  className="hidden lg:inline-flex"
                   style={{
-                    position: 'absolute',
-                    left: '50%',
-                    bottom: 0,
-                    borderRadius: '50%',
-                    background: '#8b2a2a',
-                    zIndex: 1,
-                    display: 'block',
-                    pointerEvents: 'none',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '8px 16px',
+                    borderRadius: '9999px',
+                    background: isActive ? 'oklch(0.43 0.14 25)' : '#f0ede8',
+                    color: isActive ? '#ffffff' : '#1a1816',
+                    fontSize: '12px',
+                    fontFamily: 'monospace',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    textDecoration: 'none',
+                    whiteSpace: 'nowrap',
+                    cursor: 'pointer',
+                    lineHeight: 0,
+                    transition: 'background 200ms ease, color 200ms ease',
                   }}
-                />
-                {/* Label stack */}
-                <span style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}>
+                >
+                  {/* Expanding circle */}
                   <span
-                    className="pill-label"
-                    style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}
-                  >
-                    {link.name}
-                  </span>
-                  <span
-                    className="pill-label-hover"
+                    ref={(el) => { circleRefs.current[i] = el; }}
                     aria-hidden="true"
                     style={{
                       position: 'absolute',
-                      left: 0,
-                      top: 0,
-                      display: 'inline-block',
-                      color: '#ffffff',
-                      zIndex: 3,
+                      left: '50%',
+                      bottom: 0,
+                      borderRadius: '50%',
+                      background: '#8b2a2a',
+                      zIndex: 1,
+                      display: 'block',
+                      pointerEvents: 'none',
                     }}
-                  >
-                    {link.name}
+                  />
+                  {/* Label stack */}
+                  <span style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}>
+                    <span
+                      className="pill-label"
+                      style={{ position: 'relative', display: 'inline-block', lineHeight: 1, zIndex: 2 }}
+                    >
+                      {link.name}
+                    </span>
+                    <span
+                      className="pill-label-hover"
+                      aria-hidden="true"
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        display: 'inline-block',
+                        color: '#ffffff',
+                        zIndex: 3,
+                      }}
+                    >
+                      {link.name}
+                    </span>
                   </span>
-                </span>
-              </a>
-            ))}
+                </a>
+              );
+            })}
 
             {/* Mobile hamburger in pill nav */}
             <button
-              className="lg:hidden"
+              className="lg:hidden flex items-center justify-center"
               onClick={() => setMobileOpen((v) => !v)}
               style={{
                 width: '36px',
                 height: '36px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
                 background: '#f0ede8',
                 border: 'none',
                 borderRadius: '9999px',
@@ -406,27 +455,30 @@ export function Navigation() {
         }}
       >
         <nav style={{ display: 'flex', flexDirection: 'column' }}>
-          {NAV_LINKS.map((link, i) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              style={{
-                fontFamily: 'var(--font-display, serif)',
-                fontSize: 'clamp(1.6rem, 8vw, 2.25rem)',
-                color: 'rgba(26,24,22,0.85)',
-                textDecoration: 'none',
-                padding: '14px 0',
-                borderBottom: '1px solid rgba(26,24,22,0.07)',
-                opacity: mobileOpen ? 1 : 0,
-                transform: mobileOpen ? 'translateY(0)' : 'translateY(16px)',
-                transition: `opacity 320ms ${EASE} ${i * 55 + 80}ms, transform 400ms ${EASE} ${i * 55 + 80}ms`,
-                display: 'block',
-              }}
-            >
-              {link.name}
-            </a>
-          ))}
+          {NAV_LINKS.map((link, i) => {
+            const isActive = activeSection === link.sectionId;
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.sectionId)}
+                style={{
+                  fontFamily: 'var(--font-display, serif)',
+                  fontSize: 'clamp(1.6rem, 8vw, 2.25rem)',
+                  color: isActive ? 'oklch(0.43 0.14 25)' : 'rgba(26,24,22,0.85)',
+                  textDecoration: 'none',
+                  padding: '14px 0',
+                  borderBottom: '1px solid rgba(26,24,22,0.07)',
+                  opacity: mobileOpen ? 1 : 0,
+                  transform: mobileOpen ? 'translateY(0)' : 'translateY(16px)',
+                  transition: `opacity 320ms ${EASE} ${i * 55 + 80}ms, transform 400ms ${EASE} ${i * 55 + 80}ms`,
+                  display: 'block',
+                }}
+              >
+                {link.name}
+              </a>
+            );
+          })}
         </nav>
 
         <div

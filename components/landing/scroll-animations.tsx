@@ -3,41 +3,31 @@
 import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function ScrollAnimations() {
   useEffect(() => {
-    // ── Lenis smooth scroll ──────────────────────────────────────────────────
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-
-    // Drive Lenis from GSAP ticker so ScrollTrigger stays in sync
-    gsap.ticker.add((time) => lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
-
-    // Wait one frame so all section components have mounted
+    // Wait one frame so the snap-container is in the DOM and sections are mounted
     const raf = requestAnimationFrame(() => {
+      const container = document.getElementById("snap-container");
+      if (!container) return;
+
+      // Tell ScrollTrigger to use the snap container, not the window
+      ScrollTrigger.defaults({ scroller: container });
+
+      // ── Sync scroll progress bar ────────────────────────────────────────────
+      const updateProgress = () => {
+        const el = document.getElementById("scroll-progress-bar");
+        if (!el) return;
+        const ratio = container.scrollTop / (container.scrollHeight - container.clientHeight);
+        el.style.transform = `scaleX(${ratio})`;
+      };
+      container.addEventListener("scroll", updateProgress, { passive: true });
+
       const ctx = gsap.context(() => {
 
-        // ── 1. SCROLL PROGRESS BAR ─────────────────────────────────────────
-        gsap.to("#scroll-progress-bar", {
-          scaleX: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: document.documentElement,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 0,
-          },
-        });
-
-        // ── 2. HERO CONTENT EXIT ───────────────────────────────────────────
-        // As the hero scrolls out, text drifts up and fades
+        // ── Hero content exit ─────────────────────────────────────────────────
         const heroContent = document.querySelector("[data-gsap-hero-content]");
         if (heroContent) {
           gsap.to(heroContent, {
@@ -53,8 +43,7 @@ export function ScrollAnimations() {
           });
         }
 
-        // ── 3. SECTION DIVIDER LINES GROW ─────────────────────────────────
-        // The h-px lines inside each section header grow from left to right
+        // ── Section divider lines grow ────────────────────────────────────────
         gsap.utils
           .toArray<HTMLElement>("section[id] [data-divider]")
           .forEach((line) => {
@@ -71,7 +60,7 @@ export function ScrollAnimations() {
             });
           });
 
-        // ── 4. SECTION LABEL TEXT SLIDE-IN ────────────────────────────────
+        // ── Section label text slide-in ───────────────────────────────────────
         gsap.utils
           .toArray<HTMLElement>("section[id] [data-section-label]")
           .forEach((label) => {
@@ -91,14 +80,13 @@ export function ScrollAnimations() {
         ScrollTrigger.refresh();
       });
 
-      return () => ctx.revert();
+      return () => {
+        ctx.revert();
+        container.removeEventListener("scroll", updateProgress);
+      };
     });
 
-    return () => {
-      cancelAnimationFrame(raf);
-      lenis.destroy();
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
-    };
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   return (

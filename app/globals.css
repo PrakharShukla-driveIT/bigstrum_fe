@@ -93,10 +93,34 @@
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
   }
-  html {
+  /* Explicit full-page snap container — fixed to viewport so it always owns scroll events */
+  #snap-container {
+    position: fixed;
+    inset: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
-    scroll-padding-top: 80px;
+  }
+  /* Mobile: softer snap so tall/expanded sections remain scrollable */
+  @media (max-width: 639px) {
+    #snap-container {
+      scroll-snap-type: y proximity;
+    }
+  }
+
+  /* Responsive snap section: mandatory 100dvh on desktop, min-height + proximity on mobile */
+  .snap-section {
+    height: 100dvh;
+    scroll-snap-align: start;
+  }
+  @media (max-width: 639px) {
+    .snap-section {
+      height: auto;
+      min-height: 100dvh;
+    }
   }
 }
 

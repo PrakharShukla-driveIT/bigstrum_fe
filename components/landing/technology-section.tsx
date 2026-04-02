@@ -148,9 +148,9 @@ function TechCard({
       onMouseMove={spotlight.onMouseMove}
       onMouseEnter={spotlight.onMouseEnter}
       onMouseLeave={spotlight.onMouseLeave}
-      className={`relative bg-background rounded-2xl px-7 py-6 flex flex-col gap-4
+      className={`relative bg-background rounded-2xl px-3 py-3 md:px-5 md:py-4 flex flex-col gap-2 md:gap-3
         border border-foreground/[0.06] hover:border-foreground/[0.14]
-        hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/20
+        hover:-translate-y-1 hover:shadow-xl hover:shadow-black/15
         transition-all duration-500 overflow-hidden
         ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
       style={{ transitionDelay: `${index * 80}ms` }}
@@ -165,7 +165,7 @@ function TechCard({
       />
 
       {/* Category header */}
-      <div className="relative flex items-center gap-3 pb-4">
+      <div className="relative flex items-center gap-2 md:gap-3 pb-3 md:pb-4">
         {/* Static base border */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/[0.06]" />
         {/* Animated sweep */}
@@ -176,7 +176,7 @@ function TechCard({
         <span className="font-mono text-[10px] tracking-[0.25em] text-foreground/25 uppercase">
           {String(index + 1).padStart(2, "0")}
         </span>
-        <span className="font-display text-xl text-foreground/90">
+        <span className="font-display text-base md:text-xl text-foreground/90">
           {category.category}
         </span>
       </div>
@@ -188,25 +188,25 @@ function TechCard({
           return (
             <div
               key={tech.name}
-              className={`flex items-center gap-3 py-2.5 border-b border-foreground/[0.06] last:border-0
-                rounded-lg px-2 -mx-2 transition-all duration-300
+              className={`flex items-center gap-2 md:gap-3 py-1.5 md:py-2.5 border-b border-foreground/[0.06] last:border-0
+                rounded-lg px-1.5 md:px-2 -mx-1.5 md:-mx-2 transition-all duration-300
                 ${spotlight.active ? "bg-foreground/[0.025]" : ""}`}
               style={{ transitionDelay: spotlight.active ? `${j * 40}ms` : "0ms" }}
             >
               {icon ? (
-                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 shrink-0 fill-foreground/25" aria-hidden>
+                <svg viewBox="0 0 24 24" className="w-3 h-3 md:w-3.5 md:h-3.5 shrink-0 fill-foreground/25" aria-hidden>
                   <path d={icon.path} />
                 </svg>
               ) : (
-                <span className="w-3.5 h-3.5 shrink-0 rounded-sm bg-foreground/[0.07] inline-flex items-center justify-center font-mono text-[7px] text-foreground/35 font-bold">
+                <span className="w-3 h-3 md:w-3.5 md:h-3.5 shrink-0 rounded-sm bg-foreground/[0.07] inline-flex items-center justify-center font-mono text-[7px] text-foreground/35 font-bold">
                   {tech.name.slice(0, 2).toUpperCase()}
                 </span>
               )}
-              <span className={`text-sm font-medium flex-1 transition-colors duration-300
+              <span className={`text-xs md:text-sm font-medium flex-1 transition-colors duration-300 leading-tight
                 ${spotlight.active ? "text-foreground/90" : "text-foreground/70"}`}>
                 {tech.name}
               </span>
-              <span className={`text-xs font-mono transition-colors duration-300
+              <span className={`hidden md:block text-xs font-mono transition-colors duration-300
                 ${spotlight.active ? "text-foreground/45" : "text-foreground/28"}`}>
                 {tech.note}
               </span>
@@ -227,9 +227,9 @@ function ApproachCard({ inView, delay }: { inView: boolean; delay: number }) {
       onMouseMove={spotlight.onMouseMove}
       onMouseEnter={spotlight.onMouseEnter}
       onMouseLeave={spotlight.onMouseLeave}
-      className={`relative bg-background rounded-2xl px-7 py-6 flex flex-col justify-between gap-5
+      className={`relative bg-background rounded-2xl px-3 py-3 md:px-5 md:py-4 flex flex-col justify-between gap-3 md:gap-4
         border border-foreground/[0.06] hover:border-foreground/[0.14]
-        hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/20
+        hover:-translate-y-1 hover:shadow-xl hover:shadow-black/15
         transition-all duration-500 overflow-hidden
         ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
       style={{ transitionDelay: `${delay}ms` }}
@@ -244,11 +244,11 @@ function ApproachCard({ inView, delay }: { inView: boolean; delay: number }) {
       />
 
       <div>
-        <p className="font-mono text-[10px] tracking-[0.2em] text-foreground/35 uppercase mb-4">Our Approach</p>
-        <h4 className="font-display text-2xl text-foreground leading-tight mb-3">
+        <p className="font-mono text-[10px] tracking-[0.2em] text-foreground/35 uppercase mb-2 md:mb-4">Our Approach</p>
+        <h4 className="font-display text-lg md:text-2xl text-foreground leading-tight mb-2 md:mb-3">
           Right tool for the right problem
         </h4>
-        <p className="text-sm text-foreground/50 leading-relaxed">
+        <p className="hidden md:block text-sm text-foreground/50 leading-relaxed">
           We select technologies based on your industry constraints, team, and scale — then build to last.
         </p>
       </div>
@@ -274,12 +274,15 @@ export function TechnologySection() {
   const grid   = useInView();
 
   return (
-    <section id="technology" className="relative bg-primary overflow-hidden">
+    <section
+      id="technology"
+      className="snap-section relative bg-primary overflow-hidden flex flex-col"
+    >
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full py-12 sm:py-16 lg:py-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-[84px] sm:pt-24 pb-2 sm:pb-7">
 
         {/* Section label */}
-        <div className="flex items-center gap-4 mb-12">
+        <div className="flex items-center gap-4 mb-1 sm:mb-4 md:mb-6 shrink-0">
           <span data-section-label className="font-mono text-sm tracking-[0.2em] text-white/70 uppercase">Technology</span>
           <div data-divider className="flex-1 h-px bg-white/15" />
         </div>
@@ -287,47 +290,30 @@ export function TechnologySection() {
         {/* Header */}
         <div
           ref={header.ref}
-          className={`grid lg:grid-cols-12 gap-6 mb-12 transition-all duration-700 ${
+          className={`grid lg:grid-cols-12 gap-4 mb-2 sm:mb-4 md:mb-6 shrink-0 transition-all duration-700 ${
             header.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
           <div className="lg:col-span-6">
-            <h2 className="font-display text-4xl md:text-5xl tracking-tight text-white leading-[1.05]">
+            <h2 className="font-display text-2xl md:text-4xl lg:text-5xl tracking-tight text-white leading-[1.05]">
               Our Technology Stack
             </h2>
           </div>
-          <div className="lg:col-span-6 lg:flex lg:items-end">
-            <p className="text-white/55 text-lg leading-relaxed">
+          <div className="hidden lg:col-span-6 lg:flex lg:items-end">
+            <p className="text-white/55 text-base leading-relaxed">
               Battle-tested tools chosen for reliability, performance, and long-term maintainability — not trends.
             </p>
           </div>
         </div>
 
-        {/* Stack grid */}
-        <div ref={grid.ref} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Stack grid — flex-1 fills remaining height */}
+        <div ref={grid.ref} className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 sm:flex-1 sm:min-h-0 sm:overflow-y-auto">
           {stack.map((category, i) => (
             <TechCard key={category.category} category={category} index={i} inView={grid.inView} />
           ))}
           <ApproachCard inView={grid.inView} delay={stack.length * 80} />
         </div>
 
-      </div>
-
-      {/* ── Scrolling tech strip at bottom ── */}
-      <div
-        className="mt-6 sm:mt-8 pb-6 sm:pb-8 -mx-6 lg:-mx-10 select-none pointer-events-none overflow-hidden"
-        style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}
-      >
-        <div className="flex gap-3 marquee whitespace-nowrap mb-3">
-          {[...allTechs, ...allTechs, ...allTechs].map((name, i) => (
-            <TechPill key={i} name={name} />
-          ))}
-        </div>
-        <div className="flex gap-3 marquee-reverse whitespace-nowrap">
-          {[...allTechs, ...allTechs, ...allTechs].reverse().map((name, i) => (
-            <TechPill key={i} name={name} dim />
-          ))}
-        </div>
       </div>
 
     </section>

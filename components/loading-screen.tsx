@@ -19,7 +19,7 @@ export function LoadingScreen() {
     const t1 = setTimeout(() => setPhase(1), 50)
     const t2 = setTimeout(() => setPhase(2), 400)
     const t3 = setTimeout(() => setPhase(3), 1600)
-    const t4 = setTimeout(() => setPhase(4), 2200)
+    const t4 = setTimeout(() => { setPhase(4); window.dispatchEvent(new Event('loading-complete')); }, 2200)
     return () => [t1, t2, t3, t4].forEach(clearTimeout)
   }, [pathname])
 

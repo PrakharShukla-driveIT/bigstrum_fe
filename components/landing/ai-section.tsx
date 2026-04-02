@@ -89,8 +89,8 @@ function AICard({
       onMouseMove={spotlight.onMouseMove}
       onMouseEnter={spotlight.onMouseEnter}
       onMouseLeave={spotlight.onMouseLeave}
-      className="ai-card relative rounded-2xl border border-white/10 bg-primary p-7 flex flex-col gap-5 overflow-hidden
-        hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/30 hover:border-white/20
+      className="ai-card relative rounded-2xl border border-white/10 bg-primary p-3 md:p-5 flex flex-col gap-2 md:gap-4 overflow-hidden
+        hover:-translate-y-1 hover:shadow-xl hover:shadow-black/25 hover:border-white/20
         transition-all duration-500"
     >
       {/* Mouse spotlight */}
@@ -103,7 +103,7 @@ function AICard({
       />
 
       {/* Top row */}
-      <div className="relative flex items-start justify-between pb-5">
+      <div className="relative flex items-start justify-between pb-3 md:pb-5">
         {/* Static base border */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-white/10" />
         {/* Animated sweep */}
@@ -112,33 +112,33 @@ function AICard({
           style={{ width: spotlight.active ? "100%" : "0%" }}
         />
 
-        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 transition-colors duration-300
+        <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl border flex items-center justify-center shrink-0 transition-colors duration-300
           ${spotlight.active ? "bg-white/20 border-white/30" : "bg-white/10 border-white/20"}`}>
-          <Icon className="w-4 h-4 text-white" />
+          <Icon className="w-3.5 h-3.5 text-white" />
         </div>
-        <span className="font-mono text-[9px] tracking-widest uppercase text-white/50 border border-white/20 px-2.5 py-1 rounded-full">
+        <span className="font-mono text-[8px] md:text-[9px] tracking-widest uppercase text-white/50 border border-white/20 px-2 py-0.5 md:px-2.5 md:py-1 rounded-full">
           {tag}
         </span>
       </div>
 
       {/* Text */}
       <div className="flex-1">
-        <h3 className={`font-display text-xl mb-2.5 transition-colors duration-300
+        <h3 className={`font-display text-sm md:text-xl mb-1.5 md:mb-2.5 leading-tight transition-colors duration-300
           ${spotlight.active ? "text-white" : "text-white/90"}`}>
           {title}
         </h3>
-        <p className={`text-sm leading-relaxed transition-colors duration-300
+        <p className={`hidden md:block text-sm leading-relaxed transition-colors duration-300
           ${spotlight.active ? "text-white/70" : "text-white/55"}`}>
           {desc}
         </p>
       </div>
 
       {/* Tech pills */}
-      <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/10">
+      <div className="flex flex-wrap gap-1 md:gap-1.5 pt-2 md:pt-4 border-t border-white/10">
         {pills.map((p, j) => (
           <span
             key={p}
-            className={`ai-pill font-mono text-[10px] px-2.5 py-1 rounded-full border font-medium tracking-wide transition-all duration-300
+            className={`ai-pill font-mono text-[9px] md:text-[10px] px-1.5 py-0.5 md:px-2.5 md:py-1 rounded-full border font-medium tracking-wide transition-all duration-300
               ${spotlight.active ? "border-white/40 text-white bg-white/20" : "border-white/25 text-white/70 bg-white/10"}`}
             style={{ transitionDelay: spotlight.active ? `${j * 40}ms` : "0ms" }}
           >
@@ -156,22 +156,16 @@ export function AISection() {
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const container = document.getElementById("snap-container");
+    const scroller = container ?? undefined;
     const ctx = gsap.context(() => {
       if (headerRef.current) {
         gsap.fromTo(
           Array.from(headerRef.current.children),
           { opacity: 0, y: 30 },
           {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: headerRef.current,
-              start: "top 80%",
-              once: true,
-            },
+            opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power3.out",
+            scrollTrigger: { trigger: headerRef.current, scroller, start: "top 80%", once: true },
           }
         );
       }
@@ -182,17 +176,8 @@ export function AISection() {
           cards,
           { opacity: 0, y: 50, scale: 0.95 },
           {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.65,
-            stagger: 0.08,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: "top 78%",
-              once: true,
-            },
+            opacity: 1, y: 0, scale: 1, duration: 0.65, stagger: 0.08, ease: "power3.out",
+            scrollTrigger: { trigger: gridRef.current, scroller, start: "top 78%", once: true },
           }
         );
 
@@ -201,17 +186,8 @@ export function AISection() {
           pills,
           { opacity: 0, scale: 0.8 },
           {
-            opacity: 1,
-            scale: 1,
-            duration: 0.4,
-            stagger: 0.03,
-            ease: "back.out(1.6)",
-            delay: 0.35,
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: "top 78%",
-              once: true,
-            },
+            opacity: 1, scale: 1, duration: 0.4, stagger: 0.03, ease: "back.out(1.6)", delay: 0.35,
+            scrollTrigger: { trigger: gridRef.current, scroller, start: "top 78%", once: true },
           }
         );
       }
@@ -221,31 +197,36 @@ export function AISection() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="ai" className="relative py-16 sm:py-24 lg:py-36 bg-background border-t border-foreground/10">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <section
+      ref={sectionRef}
+      id="ai"
+      className="snap-section relative bg-background border-t border-foreground/10 overflow-hidden flex flex-col"
+      style={{ height: '100dvh' }}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-[84px] sm:pt-24 pb-2 sm:pb-7">
 
         {/* Section label */}
-        <div className="flex items-center gap-4 mb-16">
+        <div className="flex items-center gap-4 mb-1 sm:mb-5 shrink-0">
           <span data-section-label className="font-mono text-sm tracking-[0.2em] text-foreground/70 uppercase">AI & Machine Learning</span>
           <div data-divider className="flex-1 h-px bg-foreground/10" />
         </div>
 
         {/* Header */}
-        <div ref={headerRef} className="grid lg:grid-cols-12 gap-6 lg:gap-8 mb-10 lg:mb-16">
+        <div ref={headerRef} className="grid lg:grid-cols-12 gap-4 lg:gap-8 mb-2 sm:mb-6 shrink-0">
           <div className="lg:col-span-6">
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight text-foreground leading-[1.05]">
+            <h2 className="font-display text-2xl md:text-4xl lg:text-5xl tracking-tight text-foreground leading-[1.05]">
               AI built for production
             </h2>
           </div>
-          <div className="lg:col-span-6 lg:flex lg:items-end">
-            <p className="text-foreground/55 text-lg leading-relaxed">
+          <div className="hidden lg:col-span-6 lg:flex lg:items-end">
+            <p className="text-foreground/55 text-base leading-relaxed">
               We integrate intelligent capabilities into regulated, high-stakes systems — with the same engineering rigour we apply to every other layer of the stack.
             </p>
           </div>
         </div>
 
-        {/* Capability cards */}
-        <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Capability cards — flex-1 fills remaining height */}
+        <div ref={gridRef} className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 flex-1 min-h-0 sm:overflow-y-auto">
           {capabilities.map((cap, i) => (
             <AICard key={cap.title} {...cap} index={i} />
           ))}

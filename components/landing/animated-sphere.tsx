@@ -68,7 +68,8 @@ export function AnimatedSphere() {
       const centerY = canvasRect.height / 2;
       const radius = Math.min(canvasRect.width, canvasRect.height) * 0.44;
 
-      ctx.font = "12px monospace";
+      const isMobile = window.innerWidth < 640;
+      ctx.font = `${isMobile ? 7 : 12}px monospace`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 

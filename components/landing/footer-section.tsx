@@ -5,76 +5,92 @@ import { ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
   Services: [
-    { name: "Custom Software", href: "#" },
+    { name: "Custom Software",    href: "#" },
     { name: "System Integration", href: "#" },
-    { name: "Cloud & DevOps", href: "#" },
-    { name: "AI / ML Solutions", href: "#" },
+    { name: "Cloud & DevOps",     href: "#" },
+    { name: "AI / ML Solutions",  href: "#" },
   ],
   Industries: [
-    { name: "Healthcare", href: "#" },
-    { name: "Government", href: "#" },
-    { name: "FinTech", href: "#" },
+    { name: "Healthcare",   href: "#" },
+    { name: "Government",   href: "#" },
+    { name: "FinTech",      href: "#" },
     { name: "Smart Cities", href: "#" },
   ],
   Company: [
-    { name: "About Us", href: "#about" },
-    { name: "Case Studies", href: "#case-studies" },
-    { name: "Insights", href: "#articles" },
-    { name: "Careers", href: "#", badge: "Hiring" },
+    { name: "About Us",      href: "#about"        },
+    { name: "Case Studies",  href: "#case-studies"  },
+    { name: "Insights",      href: "#articles"      },
+    { name: "Careers",       href: "#",  badge: "Hiring" },
   ],
   Connect: [
-    { name: "Contact Us", href: "#contact" },
-    { name: "LinkedIn", href: "#" },
-    { name: "GitHub", href: "#" },
-    { name: "Twitter / X", href: "#" },
+    { name: "Contact Us", href: "#contact"  },
+    { name: "LinkedIn",   href: "#"         },
+    { name: "GitHub",     href: "#"         },
+    { name: "Twitter / X",href: "#"         },
   ],
 };
 
 export function FooterSection() {
   return (
-    <footer className="relative bg-primary">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <footer
+      id="footer"
+      className="relative bg-primary overflow-hidden flex flex-col"
+      style={{ height: '100dvh', scrollSnapAlign: 'start' }}
+    >
+      {/* Decorative large background text */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none select-none absolute bottom-0 left-0 right-0 font-display font-bold text-white/[0.04] leading-none whitespace-nowrap overflow-hidden"
+        style={{ fontSize: 'clamp(7rem, 18vw, 18rem)', lineHeight: 1 }}
+      >
+        BIGSTRUM
+      </span>
 
-        {/* Main footer content */}
-        <div className="py-12 lg:py-20 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 lg:gap-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-[88px] sm:pt-20 pb-6 sm:pb-8">
 
-          {/* Brand column */}
-          <div className="col-span-2 sm:col-span-3 md:col-span-2 flex flex-col gap-6">
-            <a href="#" className="inline-flex items-center">
+        {/* ── Top: brand + CTA ── */}
+        <div className="flex items-start justify-between gap-6 mb-8 sm:mb-10 shrink-0">
+          <div className="flex flex-col gap-4">
+            <a href="/" aria-label="Bigstrum home">
               <Image
                 src="/bigstrum.svg"
-                width={110}
-                height={28}
+                width={130}
+                height={32}
                 alt="Bigstrum"
                 style={{ filter: "brightness(0) invert(1)", height: "auto" }}
               />
             </a>
-
-            <p className="text-sm text-white/60 leading-relaxed max-w-xs">
-              Engineering software for regulated industries. Built to last, designed to scale, secured by default.
+            <p className="text-sm text-white/55 leading-relaxed max-w-xs">
+              Engineering software for regulated industries.<br />
+              Built to last, designed to scale, secured by default.
             </p>
-
-            <div className="flex flex-col gap-2">
-              <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">Based in India · Serving globally</p>
-              <a
-                href="mailto:hello@bigstrum.com"
-                className="text-sm text-white/60 hover:text-white transition-colors duration-200"
-              >
-                hello@bigstrum.com
-              </a>
-            </div>
           </div>
 
-          {/* Link columns */}
+          <a
+            href="/book"
+            className="hidden sm:inline-flex shrink-0 items-center gap-2 bg-white text-primary font-semibold text-sm px-6 py-3 rounded-full hover:bg-white/90 transition-colors duration-200"
+          >
+            Book Consultation
+            <ArrowUpRight className="w-4 h-4" />
+          </a>
+        </div>
+
+        {/* ── Divider ── */}
+        <div className="h-px bg-white/12 shrink-0 mb-8 sm:mb-10" />
+
+        {/* ── Links grid ── */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6 flex-1 min-h-0">
           {Object.entries(footerLinks).map(([title, links]) => (
-            <div key={title}>
-              <h3 className="font-mono text-[10px] tracking-widest text-white/40 uppercase mb-6">{title}</h3>
-              <ul className="space-y-3.5">
+            <div key={title} className="flex flex-col gap-4">
+              <h3 className="font-mono text-[10px] tracking-[0.25em] text-white/40 uppercase">
+                {title}
+              </h3>
+              <ul className="flex flex-col gap-3">
                 {links.map((link) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
-                      className="text-sm text-white/55 hover:text-white transition-colors duration-200 inline-flex items-center gap-2 group"
+                      className="text-sm text-white/60 hover:text-white transition-colors duration-200 inline-flex items-center gap-2 group"
                     >
                       {link.name}
                       {"badge" in link && link.badge && (
@@ -90,16 +106,25 @@ export function FooterSection() {
           ))}
         </div>
 
-        {/* Bottom bar */}
-        <div className="py-6 border-t border-white/12 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/40 font-mono">
-            © 2026 Bigstrum Technologies. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6 text-xs text-white/40 font-mono">
+        {/* ── Divider ── */}
+        <div className="h-px bg-white/12 shrink-0 mt-6 sm:mt-8 mb-5 sm:mb-6" />
+
+        {/* ── Bottom bar ── */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shrink-0">
+          <div className="flex flex-col gap-1">
+            <p className="text-xs text-white/40 font-mono">
+              © 2026 Bigstrum Technologies. All rights reserved.
+            </p>
+            <p className="text-xs text-white/35 font-mono">
+              Based in India · Serving clients globally
+            </p>
+          </div>
+
+          <div className="flex items-center gap-5 text-xs text-white/40 font-mono">
             <a href="#" className="hover:text-white transition-colors duration-200">Privacy</a>
             <a href="#" className="hover:text-white transition-colors duration-200">Terms</a>
             <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               All systems operational
             </span>
           </div>
