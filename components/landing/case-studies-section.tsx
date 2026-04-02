@@ -77,7 +77,7 @@ export function CaseStudiesSection() {
         <div className="relative flex-1 flex flex-col min-h-0">
 
           {/* Fluid-height clip container — fills remaining space */}
-          <div className="relative flex-1 overflow-hidden rounded-[24px] sm:rounded-[32px] min-h-0">
+          <div className="relative overflow-hidden rounded-[24px] sm:rounded-[32px] min-h-[580px] sm:min-h-[620px] lg:flex-1 lg:min-h-0">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={cs.tag}
@@ -89,10 +89,10 @@ export function CaseStudiesSection() {
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
                 className="absolute inset-0"
               >
-                <div className="h-full grid lg:grid-cols-12 bg-background border border-foreground/8 rounded-[24px] sm:rounded-[32px] overflow-x-hidden shadow-[0_0_40px_rgba(0,0,0,0.1)]">
+                <div className="absolute inset-0 grid lg:grid-cols-12 bg-background border border-foreground/8 rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.1)]">
 
                   {/* Left — main content */}
-                  <div className="lg:col-span-8 p-3 sm:p-7 lg:p-10 flex flex-col gap-2.5 sm:gap-4 lg:gap-5 border-b lg:border-b-0 lg:border-r border-foreground/8 lg:overflow-hidden">
+                  <div className="lg:col-span-8 p-4 sm:p-7 lg:p-10 flex flex-col gap-2.5 sm:gap-4 lg:gap-5 border-b lg:border-b-0 lg:border-r border-foreground/8 overflow-hidden">
 
                     {/* Tags */}
                     <div className="flex items-center gap-2 shrink-0 flex-wrap">
@@ -149,7 +149,7 @@ export function CaseStudiesSection() {
                   </div>
 
                   {/* Right — outcomes panel */}
-                  <div className="lg:col-span-4 relative p-3 sm:p-7 lg:p-10 flex flex-col lg:overflow-hidden bg-foreground/[0.015]">
+                  <div className="lg:col-span-4 relative p-4 sm:p-7 lg:p-10 flex flex-col overflow-hidden bg-foreground/[0.015]">
 
                     {/* Decorative number */}
                     <p className="absolute -top-2 -right-2 font-display text-[7rem] lg:text-[9rem] leading-none font-bold text-foreground opacity-[0.04] select-none pointer-events-none">

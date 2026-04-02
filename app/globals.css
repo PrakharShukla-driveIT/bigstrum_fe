@@ -102,12 +102,21 @@
     overflow-y: scroll;
     overflow-x: hidden;
     scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
   }
-  /* Mobile: disable snap entirely so sections scroll freely */
+
+  /* Mobile: revert to normal body scroll — no fixed container, no snap */
   @media (max-width: 1023px) {
+    html, body {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
     #snap-container {
+      position: static;
+      inset: unset;
+      height: auto;
+      overflow: visible;
       scroll-snap-type: none;
+      scroll-behavior: auto;
     }
   }
 

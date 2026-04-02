@@ -29,6 +29,12 @@ export function Navigation() {
   const tweenRefs   = useRef<Array<gsap.core.Tween | null>>([]);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 1024;
+    if (isMobile) {
+      const onScroll = () => setIsScrolled(window.scrollY > 80);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      return () => window.removeEventListener('scroll', onScroll);
+    }
     const container = document.getElementById('snap-container');
     if (!container) return;
     const onScroll = () => setIsScrolled(container.scrollTop > 80);
@@ -36,10 +42,10 @@ export function Navigation() {
     return () => container.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Active section via IntersectionObserver on the explicit snap container
+  // Active section via IntersectionObserver — uses snap container on desktop, viewport on mobile
   useEffect(() => {
-    const container = document.getElementById('snap-container');
-    if (!container) return;
+    const isMobile = window.innerWidth < 1024;
+    const container = isMobile ? null : document.getElementById('snap-container');
 
     const sectionIds = ['hero', 'case-studies', 'articles', 'technology', 'ai', 'about', 'contact'];
     const observers: IntersectionObserver[] = [];
@@ -78,9 +84,14 @@ export function Navigation() {
   // Close mobile menu on scroll
   useEffect(() => {
     if (!mobileOpen) return;
+    const close = () => setMobileOpen(false);
+    const isMobile = window.innerWidth < 1024;
+    if (isMobile) {
+      window.addEventListener('scroll', close, { passive: true, once: true });
+      return () => window.removeEventListener('scroll', close);
+    }
     const container = document.getElementById('snap-container');
     if (!container) return;
-    const close = () => setMobileOpen(false);
     container.addEventListener('scroll', close, { passive: true, once: true });
     return () => container.removeEventListener('scroll', close);
   }, [mobileOpen]);

@@ -18,7 +18,8 @@ export function BlogsSection() {
 
   useEffect(() => {
     if (!sectionRef.current) return;
-    const container = document.getElementById("snap-container");
+    const isMobile = window.innerWidth < 1024;
+    const container = isMobile ? null : document.getElementById("snap-container");
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>("[data-article]").forEach((el) => {
         gsap.from(el, {
@@ -83,7 +84,7 @@ export function BlogsSection() {
                 {featured.title}
               </h3>
 
-              <p className="text-foreground/55 text-base sm:text-lg lg:text-xl leading-relaxed flex-1 line-clamp-3 sm:line-clamp-none">
+              <p className="text-foreground/55 text-base sm:text-lg lg:text-xl leading-relaxed flex-1">
                 {featured.snippet}
               </p>
             </div>

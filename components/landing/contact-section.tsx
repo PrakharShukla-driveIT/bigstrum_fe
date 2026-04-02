@@ -10,7 +10,8 @@ function useInView(threshold = 0.1) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const root = document.getElementById("snap-container") ?? undefined;
+    const isMobile = window.innerWidth < 1024;
+    const root = isMobile ? null : (document.getElementById("snap-container") ?? null);
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
       { threshold, root }
