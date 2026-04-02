@@ -68,15 +68,36 @@ export function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", company: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [sending,   setSending]   = useState(false);
+  const [error,     setError]     = useState<string | null>(null);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSending(true);
-    setTimeout(() => { setSending(false); setSubmitted(true); }, 1200);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to send");
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -239,6 +260,12 @@ export function ContactSection() {
                     className="px-4 py-3 rounded-xl border border-foreground/15 bg-background text-sm text-foreground placeholder:text-foreground/35 focus:outline-none focus:border-primary/50 transition-colors duration-200 resize-none"
                   />
                 </div>
+
+                {error && (
+                  <p className="text-red-500 text-[10px] font-mono uppercase tracking-tight">
+                    {error}
+                  </p>
+                )}
 
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button

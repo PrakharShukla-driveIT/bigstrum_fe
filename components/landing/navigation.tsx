@@ -258,8 +258,8 @@ export function Navigation() {
                 href="#"
                 variant="primary"
                 style={{
-                  background: '#2ba8c8', /* Updated teal based on the image */
-                  color: '#fff',
+                  background: '#e8f8f9', /* Updated teal based on the image */
+                  color: '',
                   border: 'none',
                   fontSize: '13px',
                   fontWeight: 500,
