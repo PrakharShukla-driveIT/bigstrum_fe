@@ -59,7 +59,7 @@ export function PillButton({
       tlRef.current?.kill();
       const tl = gsap.timeline({ paused: true });
 
-      tl.to(circle, { scale: 1.2, xPercent: -50, duration: 5, ease: GSAP_EASE, overwrite: "auto" }, 0);
+      tl.to(circle, { scale: 3, xPercent: -50, duration: 5, ease: GSAP_EASE, overwrite: "auto" }, 0);
       if (label) tl.to(label, { y: -(h + 8), duration: 5, ease: GSAP_EASE, overwrite: "auto" }, 0);
       if (hover) tl.to(hover, { y: 0, opacity: 1, duration: 5, ease: GSAP_EASE, overwrite: "auto" }, 0);
 

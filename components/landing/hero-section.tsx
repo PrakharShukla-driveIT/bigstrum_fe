@@ -5,60 +5,10 @@ import { ArrowRight } from "lucide-react";
 import { AnimatedSphere } from "./animated-sphere";
 import { PillButton } from "./pill-button";
 
-const WORDS = ["Build Grow Scale Ship"];
-const CHARS = "";
-const SPEED = 55;   // ms per character reveal
-const HOLD  = 1800; // ms to hold each word before switching
-
-function useDecryptCycle() {
-  const [display, setDisplay] = useState(WORDS[0]);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const randomChar = () => CHARS[Math.floor(Math.random() * CHARS.length)];
-
-  const scramble = (target: string, revealed: number) =>
-    target.split("").map((ch, i) => (i < revealed ? ch : randomChar())).join("");
-
-  const animateWord = useCallback((word: string, onDone: () => void) => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    let revealed = 0;
-    setDisplay(scramble(word, 0));
-    intervalRef.current = setInterval(() => {
-      revealed++;
-      setDisplay(scramble(word, revealed));
-      if (revealed >= word.length) {
-        clearInterval(intervalRef.current!);
-        setDisplay(word);
-        setTimeout(onDone, HOLD);
-      }
-    }, SPEED);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    // Wait for loading screen to finish (2200ms) + small buffer
-    const start = setTimeout(() => {
-      let idx = 0;
-      const next = () => {
-        animateWord(WORDS[idx], () => {
-          idx = (idx + 1) % WORDS.length;
-          next();
-        });
-      };
-      next();
-    }, 2300);
-
-    return () => {
-      clearTimeout(start);
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [animateWord]);
-
-  return display;
-}
+const HERO_TEXT = "Build Ship Scale Grow.";
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
-  const display = useDecryptCycle();
 
   useEffect(() => {
     setIsVisible(true);
@@ -129,7 +79,18 @@ export function HeroSection() {
             >
               <span className="block text-foreground/80">A Platform To</span>
               <span className="block text-primary">
-                {display}
+                {HERO_TEXT.split("").map((char, index) => (
+                  <span
+                    key={index}
+                    className="transition-opacity duration-700 inline-block"
+                    style={{
+                      opacity: isVisible ? 1 : 0,
+                      transitionDelay: `${2300 + index * 40}ms`
+                    }}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </span>
+                ))}
               </span>
             </h1>
           </div>

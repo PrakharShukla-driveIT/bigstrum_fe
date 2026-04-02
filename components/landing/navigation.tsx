@@ -253,7 +253,30 @@ export function Navigation() {
               })}
             </nav>
 
-            <div className="hidden lg:block" style={{ flexShrink: 0, pointerEvents: 'auto' }}>
+            <div className="hidden lg:flex items-center gap-3" style={{ flexShrink: 0, pointerEvents: 'auto' }}>
+              <PillButton
+                href="#"
+                variant="primary"
+                style={{
+                  background: '#2ba8c8', /* Updated teal based on the image */
+                  color: '#fff',
+                  border: 'none',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  padding: '0 20px',
+                  height: '44px',
+                  whiteSpace: 'nowrap',
+                  pointerEvents: 'auto',
+                }}
+              >
+                <Image 
+                  src="/Niraapadh.png" 
+                  alt="Nirapadh" 
+                  width={120} 
+                  height={32} 
+                  className="h-8 w-auto object-contain"
+                />
+              </PillButton>
               <PillButton
                 href="/book"
                 variant="primary"
@@ -262,7 +285,8 @@ export function Navigation() {
                   color: '#fff',
                   fontSize: '13px',
                   fontWeight: 500,
-                  padding: '10px 20px',
+                  padding: '0 20px',
+                  height: '44px',
                   whiteSpace: 'nowrap',
                   pointerEvents: 'auto',
                 }}

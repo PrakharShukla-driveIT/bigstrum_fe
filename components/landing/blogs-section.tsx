@@ -38,7 +38,7 @@ export function BlogsSection() {
       className="snap-section relative bg-background flex flex-col overflow-hidden"
       style={{ height: '100dvh' }}
     >
-      <div className={`max-w-7xl mx-auto px-6 lg:px-10 w-full flex flex-col flex-1 pt-[84px] sm:pt-24 pb-4 sm:pb-8 ${expanded ? "overflow-y-auto" : "overflow-hidden"}`}>
+      <div className={`max-w-7xl mx-auto px-6 lg:px-10 w-full flex flex-col flex-1 pt-[84px] sm:pt-24 ${expanded ? "pb-24 sm:pb-8 overflow-y-auto" : "pb-4 sm:pb-8 overflow-hidden"}`}>
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-4 sm:mb-6 shrink-0">
@@ -73,11 +73,11 @@ export function BlogsSection() {
             className="lg:col-span-6 lg:h-full bg-background rounded-2xl p-6 lg:p-10 flex flex-col justify-between group cursor-pointer hover:bg-foreground/[0.03] transition-colors duration-300 border border-foreground/6"
           >
             <div className="flex flex-col gap-4 flex-1">
-              <div className="flex items-center justify-between">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-mono tracking-widest uppercase font-bold bg-foreground/5 border border-foreground/12 text-foreground/60">
+              <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-mono tracking-widest uppercase font-bold bg-foreground/5 border border-foreground/12 text-foreground/60 whitespace-nowrap">
                   {featured.category}
                 </span>
-                <span className="font-mono text-[10px] text-foreground/30">{featured.date} · {featured.readTime} read</span>
+                <span className="font-mono text-[10px] text-foreground/30 shrink-0 text-right">{featured.date} · {featured.readTime} read</span>
               </div>
 
               <h3 className="font-display text-xl sm:text-2xl lg:text-[1.85rem] text-foreground leading-tight group-hover:text-primary transition-colors duration-200">
@@ -117,11 +117,11 @@ export function BlogsSection() {
                 data-article
                 className="bg-background rounded-2xl p-4 sm:p-5 flex flex-col gap-2 group cursor-pointer hover:bg-foreground/[0.03] transition-colors duration-300 border border-foreground/6"
               >
-                <div className="flex items-start justify-between gap-1">
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-mono tracking-widest uppercase font-bold bg-foreground/5 border border-foreground/12 text-foreground/60 leading-tight">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-mono tracking-widest uppercase font-bold bg-foreground/5 border border-foreground/12 text-foreground/60 leading-tight whitespace-nowrap">
                     {article.category}
                   </span>
-                  <span className="font-mono text-[9px] text-foreground/30 shrink-0">{article.readTime} read</span>
+                  <span className="font-mono text-[9px] text-foreground/30 shrink-0 text-right">{article.readTime} read</span>
                 </div>
 
                 <h3 className="font-display text-sm text-foreground leading-snug group-hover:text-primary transition-colors duration-200 line-clamp-2">
