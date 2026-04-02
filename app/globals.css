@@ -104,22 +104,23 @@
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
   }
-  /* Mobile: softer snap so tall/expanded sections remain scrollable */
-  @media (max-width: 639px) {
+  /* Mobile: disable snap entirely so sections scroll freely */
+  @media (max-width: 1023px) {
     #snap-container {
-      scroll-snap-type: y proximity;
+      scroll-snap-type: none;
     }
   }
 
-  /* Responsive snap section: mandatory 100dvh on desktop, min-height + proximity on mobile */
+  /* Snap section: full-height snapping on desktop only */
   .snap-section {
     height: 100dvh;
     scroll-snap-align: start;
   }
-  @media (max-width: 639px) {
+  @media (max-width: 1023px) {
     .snap-section {
-      height: auto;
+      height: auto !important;
       min-height: 100dvh;
+      scroll-snap-align: none;
     }
   }
 }
