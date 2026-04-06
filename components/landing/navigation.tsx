@@ -9,6 +9,7 @@ import { PillButton } from './pill-button';
 const NAV_LINKS = [
   { name: 'Case Studies', href: '#case-studies', sectionId: 'case-studies' },
   { name: 'Insights',     href: '#articles',     sectionId: 'articles'     },
+  { name: 'Services',     href: '#capabilities', sectionId: 'capabilities' },
   { name: 'About',        href: '#about',        sectionId: 'about'        },
   { name: 'Contact',      href: '#contact',      sectionId: 'contact'      },
 ];
@@ -54,7 +55,7 @@ export function Navigation() {
     const isMobile = window.innerWidth < 1024;
     const container = isMobile ? null : document.getElementById('snap-container');
 
-    const sectionIds = ['hero', 'case-studies', 'articles', 'technology', 'ai', 'about', 'contact'];
+    const sectionIds = ['hero', 'case-studies', 'capabilities', 'articles', 'technology', 'ai', 'about', 'contact'];
     const observers: IntersectionObserver[] = [];
 
     sectionIds.forEach((id) => {

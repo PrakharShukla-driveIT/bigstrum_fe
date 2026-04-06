@@ -130,7 +130,7 @@ export function ContactSection() {
         {/* Mobile contact info strip */}
         <div className="lg:hidden shrink-0 mb-4 flex flex-col gap-2.5">
           {[
-            { icon: Mail,  label: "info@driveittech.in",   href: "mailto:info@driveittech.in" },
+            { icon: Mail,  label: "info@bigstrum.in",   href: "mailto:info@bigstrum.in" },
             { icon: Phone, label: "+91 7675-012174",        href: "tel:+917675012174" },
           ].map(({ icon: Icon, label, href }) => (
             <a key={label} href={href} className="inline-flex items-center gap-2.5 text-sm text-foreground/65 hover:text-foreground transition-colors duration-200">
@@ -162,7 +162,7 @@ export function ContactSection() {
             <div className="hidden lg:flex flex-col gap-3">
               {[
                 { icon: Calendar, label: "Free Consultation", value: "30-min discovery call, no commitment"                                                                              },
-                { icon: Mail,     label: "Email",             value: "info@driveittech.in"                                                                                               },
+                { icon: Mail,     label: "Email",             value: "info@bigstrum.in"                                                                                               },
                 { icon: Phone,    label: "Phone",             value: "+91 7675-012174"                                                                                                   },
                 { icon: MapPin,   label: "Address",           value: "Pranava Business Square, Unit 2, 3rd Floor, Kondapur, Laxmi Cyber City, Whitefields, Gachibowli, Hyderabad 500084" },
               ].map(({ icon: Icon, label, value }) => (

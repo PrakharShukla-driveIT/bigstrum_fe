@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { AnimatedSphere } from "./animated-sphere";
 import { PillButton } from "./pill-button";
 
-const HERO_TEXT = "Build Ship Scale Grow.";
+const HERO_TEXT = "Build. Ship. Scale. Grow.";
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
