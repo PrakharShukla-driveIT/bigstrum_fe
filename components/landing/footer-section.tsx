@@ -5,16 +5,16 @@ import { ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
   Services: [
-    { name: "Custom Software",    href: "#" },
-    { name: "System Integration", href: "#" },
-    { name: "Cloud & DevOps",     href: "#" },
-    { name: "AI / ML Solutions",  href: "#" },
+    { name: "Custom Software",    href: "/coming-soon" },
+    { name: "System Integration", href: "/coming-soon" },
+    { name: "Cloud & DevOps",     href: "/coming-soon" },
+    { name: "AI / ML Solutions",  href: "/coming-soon" },
   ],
   Industries: [
-    { name: "Healthcare",   href: "#" },
-    { name: "Government",   href: "#" },
-    { name: "FinTech",      href: "#" },
-    { name: "Smart Cities", href: "#" },
+    { name: "Healthcare",   href: "/coming-soon" },
+    { name: "Government",   href: "/coming-soon" },
+    { name: "FinTech",      href: "/coming-soon" },
+    { name: "Smart Cities", href: "/coming-soon" },
   ],
   Company: [
     { name: "About Us",      href: "#about"        },
@@ -24,9 +24,9 @@ const footerLinks = {
   ],
   Connect: [
     { name: "Contact Us", href: "#contact"  },
-    { name: "LinkedIn",   href: "#"         },
-    { name: "GitHub",     href: "#"         },
-    { name: "Twitter / X",href: "#"         },
+    { name: "LinkedIn",   href: "/coming-soon"         },
+    { name: "GitHub",     href: "/coming-soon"         },
+    { name: "Twitter / X",href: "/coming-soon"         },
   ],
 };
 
@@ -121,8 +121,8 @@ export function FooterSection() {
           </div>
 
           <div className="flex items-center gap-5 text-xs text-white/40 font-mono">
-            <a href="#" className="hover:text-white transition-colors duration-200">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors duration-200">Terms</a>
+            <a href="/coming-soon" className="hover:text-white transition-colors duration-200">Privacy</a>
+            <a href="/coming-soon" className="hover:text-white transition-colors duration-200">Terms</a>
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               All systems operational

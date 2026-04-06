@@ -197,7 +197,7 @@ const PillNav: React.FC<PillNavProps> = ({
         {/* Logo slot */}
         {logo && (
           <a
-            href="#"
+            href="/"
             className="rounded-full inline-flex items-center justify-center overflow-hidden shrink-0"
             style={{ width: 'var(--nav-h)', height: 'var(--nav-h)', background: 'var(--base)' }}
           >
