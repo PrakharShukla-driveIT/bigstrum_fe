@@ -58,7 +58,7 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div data-gsap-hero-content className="relative z-10 w-full px-6 lg:px-16 pt-24 sm:pt-28 lg:pt-36 pb-12 flex-1 flex flex-col justify-center">
+      <div data-gsap-hero-content className="relative z-10 w-full px-6 lg:px-16 pt-20 sm:pt-28 lg:pt-36 pb-12 flex-1 flex flex-col justify-center">
         <div className="max-w-2xl">
 
           {/* Eyebrow

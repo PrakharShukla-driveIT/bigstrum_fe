@@ -3,15 +3,19 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { PillButton } from './pill-button';
 
 const NAV_LINKS = [
   { name: 'Case Studies', href: '#case-studies', sectionId: 'case-studies' },
   { name: 'Insights',     href: '#articles',     sectionId: 'articles'     },
-  { name: 'Technology',   href: '#technology',   sectionId: 'technology'   },
   { name: 'About',        href: '#about',        sectionId: 'about'        },
   { name: 'Contact',      href: '#contact',      sectionId: 'contact'      },
+];
+
+const PRODUCTS = [
+  { name: 'Nirapadh', href: 'https://qa.niraapadh.com' },
+  { name: 'DriveIT',  href: 'https://www.driveittech.in/' },
 ];
 
 const EASE   = 'cubic-bezier(0.4, 0, 0.2, 1)';
@@ -22,6 +26,9 @@ export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('hero');
+  const [productsOpen, setProductsOpen] = useState(false);
+  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
+  const productsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // GSAP pill hover refs
   const circleRefs  = useRef<Array<HTMLSpanElement | null>>([]);
@@ -205,7 +212,7 @@ export function Navigation() {
               height: '100%',
               display: 'flex',
               alignItems: 'center',
-              overflow: 'hidden',
+              overflow: 'visible',
             }}
           >
             <a href="/" style={{ flexShrink: 0 }}>
@@ -225,7 +232,7 @@ export function Navigation() {
             </a>
 
             {/* Desktop nav links */}
-            <nav style={{ flex: 1, justifyContent: 'center', gap: '24px' }} className="hidden lg:flex">
+            <nav style={{ flex: 1, justifyContent: 'center', gap: '24px', alignItems: 'center' }} className="hidden lg:flex">
               {NAV_LINKS.map((link) => {
                 const isActive = activeSection === link.sectionId;
                 return (
@@ -251,12 +258,108 @@ export function Navigation() {
                   </a>
                 );
               })}
+
+              {/* Products dropdown */}
+              <div
+                style={{ position: 'relative' }}
+                onMouseEnter={() => {
+                  if (productsTimeoutRef.current) clearTimeout(productsTimeoutRef.current);
+                  setProductsOpen(true);
+                }}
+                onMouseLeave={() => {
+                  productsTimeoutRef.current = setTimeout(() => setProductsOpen(false), 120);
+                }}
+              >
+                <button
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontSize: '13px',
+                    fontFamily: 'monospace',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: productsOpen ? 'oklch(0.43 0.14 25)' : 'rgba(26,24,22,0.6)',
+                    fontWeight: productsOpen ? 600 : 400,
+                    whiteSpace: 'nowrap',
+                    padding: 0,
+                    transition: 'color 200ms ease',
+                  }}
+                >
+                  Products
+                  <ChevronDown
+                    size={12}
+                    style={{
+                      transition: 'transform 200ms ease',
+                      transform: productsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    }}
+                  />
+                </button>
+
+                {/* Dropdown panel */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 14px)',
+                    left: '50%',
+                    background: '#ffffff',
+                    borderRadius: '14px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 1px 0 rgba(0,0,0,0.04)',
+                    border: '1px solid rgba(26,24,22,0.07)',
+                    padding: '6px',
+                    minWidth: '160px',
+                    opacity: productsOpen ? 1 : 0,
+                    pointerEvents: productsOpen ? 'auto' : 'none',
+                    transform: productsOpen
+                      ? 'translateX(-50%) translateY(0) scale(1)'
+                      : 'translateX(-50%) translateY(-6px) scale(0.97)',
+                    transition: `opacity 180ms ease, transform 200ms ${SPRING}`,
+                    zIndex: 100,
+                  }}
+                >
+                  {PRODUCTS.map((p) => (
+                    <a
+                      key={p.name}
+                      href={p.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'block',
+                        padding: '9px 14px',
+                        borderRadius: '9px',
+                        fontSize: '13px',
+                        fontFamily: 'monospace',
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        textDecoration: 'none',
+                        color: 'rgba(26,24,22,0.75)',
+                        whiteSpace: 'nowrap',
+                        transition: 'background 150ms ease, color 150ms ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(26,24,22,0.05)';
+                        e.currentTarget.style.color = 'oklch(0.43 0.14 25)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = 'rgba(26,24,22,0.75)';
+                      }}
+                    >
+                      {p.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
             </nav>
 
             <div className="hidden lg:flex items-center gap-3" style={{ flexShrink: 0, pointerEvents: 'auto' }}>
               <PillButton
                 href="#"
                 variant="primary"
+                title="Safeguard Your Startup."
                 style={{
                   background: '#e8f8f9', /* Updated teal based on the image */
                   color: '',
@@ -269,11 +372,11 @@ export function Navigation() {
                   pointerEvents: 'auto',
                 }}
               >
-                <Image 
-                  src="/Niraapadh.png" 
-                  alt="Nirapadh" 
-                  width={120} 
-                  height={32} 
+                <Image
+                  src="/Niraapadh.png"
+                  alt="Nirapadh"
+                  width={120}
+                  height={32}
                   className="h-8 w-auto object-contain"
                 />
               </PillButton>
@@ -341,7 +444,7 @@ export function Navigation() {
               borderRadius: '9999px',
               boxShadow: '0 4px 32px rgba(0,0,0,0.12)',
               maxWidth: 'calc(100vw - 32px)',
-              overflow: 'hidden',
+              overflow: 'visible',
               opacity: isScrolled ? 1 : 0,
               transform: isScrolled ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(-10px)',
               pointerEvents: isScrolled ? 'auto' : 'none',
@@ -448,6 +551,102 @@ export function Navigation() {
               );
             })}
 
+            {/* Products pill dropdown — desktop only */}
+            <div
+              className="hidden lg:block"
+              style={{ position: 'relative' }}
+              onMouseEnter={() => {
+                if (productsTimeoutRef.current) clearTimeout(productsTimeoutRef.current);
+                setProductsOpen(true);
+              }}
+              onMouseLeave={() => {
+                productsTimeoutRef.current = setTimeout(() => setProductsOpen(false), 120);
+              }}
+            >
+              <button
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '8px 16px',
+                  borderRadius: '9999px',
+                  background: productsOpen ? 'oklch(0.43 0.14 25)' : '#f0ede8',
+                  color: productsOpen ? '#ffffff' : '#1a1816',
+                  fontSize: '12px',
+                  fontFamily: 'monospace',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  border: 'none',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'background 200ms ease, color 200ms ease',
+                }}
+              >
+                Products
+                <ChevronDown
+                  size={11}
+                  style={{
+                    transition: 'transform 200ms ease',
+                    transform: productsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                  }}
+                />
+              </button>
+
+              {/* Pill dropdown panel */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 10px)',
+                  left: '50%',
+                  background: '#ffffff',
+                  borderRadius: '14px',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 1px 0 rgba(0,0,0,0.04)',
+                  border: '1px solid rgba(26,24,22,0.07)',
+                  padding: '6px',
+                  minWidth: '150px',
+                  opacity: productsOpen ? 1 : 0,
+                  pointerEvents: productsOpen ? 'auto' : 'none',
+                  transform: productsOpen
+                    ? 'translateX(-50%) translateY(0) scale(1)'
+                    : 'translateX(-50%) translateY(-6px) scale(0.97)',
+                  transition: `opacity 180ms ease, transform 200ms ${SPRING}`,
+                  zIndex: 100,
+                }}
+              >
+                {PRODUCTS.map((p) => (
+                  <a
+                    key={p.name}
+                    href={p.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'block',
+                      padding: '9px 14px',
+                      borderRadius: '9px',
+                      fontSize: '12px',
+                      fontFamily: 'monospace',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      textDecoration: 'none',
+                      color: 'rgba(26,24,22,0.75)',
+                      whiteSpace: 'nowrap',
+                      transition: 'background 150ms ease, color 150ms ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(26,24,22,0.05)';
+                      e.currentTarget.style.color = 'oklch(0.43 0.14 25)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = 'rgba(26,24,22,0.75)';
+                    }}
+                  >
+                    {p.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+
             {/* Mobile hamburger in pill nav */}
             <button
               className="lg:hidden flex items-center justify-center"
@@ -514,6 +713,74 @@ export function Navigation() {
               </a>
             );
           })}
+
+          {/* Products expandable in mobile */}
+          <div
+            style={{
+              opacity: mobileOpen ? 1 : 0,
+              transform: mobileOpen ? 'translateY(0)' : 'translateY(16px)',
+              transition: `opacity 320ms ${EASE} ${NAV_LINKS.length * 55 + 80}ms, transform 400ms ${EASE} ${NAV_LINKS.length * 55 + 80}ms`,
+            }}
+          >
+            <button
+              onClick={() => setMobileProductsOpen((v) => !v)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
+                fontFamily: 'var(--font-display, serif)',
+                fontSize: 'clamp(1.6rem, 8vw, 2.25rem)',
+                color: 'rgba(26,24,22,0.85)',
+                background: 'none',
+                border: 'none',
+                padding: '14px 0',
+                borderBottom: '1px solid rgba(26,24,22,0.07)',
+                cursor: 'pointer',
+                textAlign: 'left',
+              }}
+            >
+              Products
+              <ChevronDown
+                size={20}
+                style={{
+                  transition: 'transform 200ms ease',
+                  transform: mobileProductsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                  flexShrink: 0,
+                }}
+              />
+            </button>
+            <div
+              style={{
+                overflow: 'hidden',
+                maxHeight: mobileProductsOpen ? '200px' : '0',
+                transition: 'max-height 300ms ease',
+              }}
+            >
+              {PRODUCTS.map((p) => (
+                <a
+                  key={p.name}
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileOpen(false)}
+                  style={{
+                    display: 'block',
+                    padding: '10px 16px',
+                    fontFamily: 'monospace',
+                    fontSize: '14px',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(26,24,22,0.6)',
+                    textDecoration: 'none',
+                    borderBottom: '1px solid rgba(26,24,22,0.04)',
+                  }}
+                >
+                  {p.name}
+                </a>
+              ))}
+            </div>
+          </div>
         </nav>
 
         <div

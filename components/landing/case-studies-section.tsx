@@ -46,7 +46,7 @@ export function CaseStudiesSection() {
       id="case-studies"
       className="snap-section relative bg-primary overflow-hidden flex flex-col"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-[84px] sm:pt-24 pb-2 sm:pb-7">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-24 pb-2 sm:pb-7">
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-2 sm:mb-4 shrink-0">

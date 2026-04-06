@@ -38,7 +38,7 @@ export function BlogsSection() {
       className="snap-section relative bg-background flex flex-col overflow-hidden"
       style={{ height: '100dvh' }}
     >
-      <div className={`max-w-7xl mx-auto px-6 lg:px-10 w-full flex flex-col flex-1 pt-[84px] sm:pt-24 ${expanded ? "pb-24 sm:pb-8 overflow-y-auto" : "pb-4 sm:pb-8 overflow-hidden"}`}>
+      <div className={`max-w-7xl mx-auto px-6 lg:px-10 w-full flex flex-col flex-1 pt-16 sm:pt-24 ${expanded ? "pb-24 sm:pb-8 overflow-y-auto" : "pb-4 sm:pb-8 overflow-hidden"}`}>
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-4 sm:mb-6 shrink-0">

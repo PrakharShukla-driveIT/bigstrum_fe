@@ -13,6 +13,7 @@ interface PillButtonProps {
   variant?: "primary" | "outline";
   className?: string;
   style?: React.CSSProperties;
+  title?: string;
 }
 
 export function PillButton({
@@ -22,6 +23,7 @@ export function PillButton({
   variant = "outline",
   className = "",
   style,
+  title,
 }: PillButtonProps) {
   const containerRef = useRef<HTMLElement>(null);
   const circleRef = useRef<HTMLSpanElement>(null);
@@ -153,6 +155,7 @@ export function PillButton({
         href={href}
         className={className}
         style={sharedStyle}
+        title={title}
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
       >
@@ -166,6 +169,7 @@ export function PillButton({
       ref={containerRef as React.Ref<HTMLButtonElement>}
       className={className}
       style={sharedStyle}
+      title={title}
       onClick={onClick}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
