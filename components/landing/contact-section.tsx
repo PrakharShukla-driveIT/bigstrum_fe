@@ -47,7 +47,7 @@ const footerColumns = [
       { name: "About Us",     href: "#about"       },
       { name: "Case Studies", href: "#case-studies" },
       { name: "Insights",     href: "#articles"     },
-      { name: "Careers",      href: "#", badge: "Hiring" },
+      
     ],
   },
   {

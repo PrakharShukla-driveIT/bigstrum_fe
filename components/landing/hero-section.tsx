@@ -79,16 +79,19 @@ export function HeroSection() {
             >
               <span className="block text-foreground/80">A Platform To</span>
               <span className="block text-primary">
-                {HERO_TEXT.split("").map((char, index) => (
+                {HERO_TEXT.split(" ").map((word, index) => (
                   <span
                     key={index}
-                    className="transition-opacity duration-700 inline-block"
+                    className="inline-block"
                     style={{
                       opacity: isVisible ? 1 : 0,
-                      transitionDelay: `${2300 + index * 40}ms`
+                      transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+                      transition: `opacity 0.6s ease, transform 0.6s ease`,
+                      transitionDelay: `${300 + index * 180}ms`,
+                      marginRight: index < HERO_TEXT.split(" ").length - 1 ? '0.25em' : 0,
                     }}
                   >
-                    {char === " " ? "\u00A0" : char}
+                    {word}
                   </span>
                 ))}
               </span>
@@ -98,6 +101,7 @@ export function HeroSection() {
           {/* CTA */}
           <div className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-9 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
             <PillButton
+              href="/book"
               variant="primary"
               style={{
                 background: "oklch(0.43 0.14 25)",

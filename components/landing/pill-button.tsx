@@ -8,6 +8,8 @@ const GSAP_EASE = "power3.out";
 interface PillButtonProps {
   children: ReactNode;
   href?: string;
+  target?: string;
+  rel?: string;
   onClick?: () => void;
   /** "primary" = dark bg + white text; "outline" = light bg + dark text */
   variant?: "primary" | "outline";
@@ -19,6 +21,8 @@ interface PillButtonProps {
 export function PillButton({
   children,
   href,
+  target,
+  rel,
   onClick,
   variant = "outline",
   className = "",
@@ -153,6 +157,8 @@ export function PillButton({
       <a
         ref={containerRef as React.Ref<HTMLAnchorElement>}
         href={href}
+        target={target}
+        rel={rel}
         className={className}
         style={sharedStyle}
         title={title}

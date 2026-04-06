@@ -358,7 +358,9 @@ export function Navigation() {
 
             <div className="hidden lg:flex items-center gap-3" style={{ flexShrink: 0, pointerEvents: 'auto' }}>
               <PillButton
-                href="#"
+                href="https://qa.niraapadh.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 variant="primary"
                 title="Safeguard Your Startup."
                 style={{
