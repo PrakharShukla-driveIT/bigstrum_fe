@@ -91,7 +91,7 @@ export function ArchitectureSection() {
       id="architecture"
       className="snap-section relative bg-background border-t border-foreground/10 overflow-hidden flex flex-col"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-24 pb-4 sm:pb-8 min-h-0" style={{ minHeight: 0 }}>
+      <div className="section-inner max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-20 pb-4 sm:pb-6 min-h-0" style={{ minHeight: 0 }}>
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-2 sm:mb-4 shrink-0">
@@ -100,21 +100,21 @@ export function ArchitectureSection() {
         </div>
 
         {/* Header */}
-        <div ref={headerRef} className="grid lg:grid-cols-12 gap-3 lg:gap-8 mb-4 sm:mb-6 shrink-0">
+        <div ref={headerRef} className="grid lg:grid-cols-12 gap-3 lg:gap-6 mb-3 sm:mb-4 shrink-0">
           <div className="lg:col-span-6">
-            <h2 className="font-display text-3xl md:text-5xl lg:text-5xl xl:text-6xl tracking-tight text-foreground leading-[1.05] font-bold">
+            <h2 className="font-display text-3xl md:text-4xl lg:text-4xl xl:text-5xl tracking-tight text-foreground leading-[1.05] font-bold">
               Enterprise Architecture
             </h2>
           </div>
           <div className="hidden lg:col-span-6 lg:flex lg:items-end">
-            <p className="text-foreground/55 text-base leading-relaxed">
+            <p className="text-foreground/55 text-sm leading-relaxed">
               Every system we build follows a layered blueprint — client, logic, intelligence, and foundation — engineered to scale and secure by default.
             </p>
           </div>
         </div>
 
         {/* Body — flex-1 fills remaining height */}
-        <div className="flex-1 flex flex-col min-h-0 gap-3 sm:gap-5">
+        <div className="flex-1 flex flex-col min-h-0 gap-3">
 
           {/* Architecture layers grid — flex-1 so it takes remaining height */}
           <div ref={grid.ref} className="flex-1 min-h-0 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
@@ -149,20 +149,20 @@ export function ArchitectureSection() {
           {/* Impact metrics — fixed height at bottom */}
           <div
             ref={metricsRef.ref}
-            className={`shrink-0 rounded-2xl border border-foreground/[0.07] bg-foreground/[0.015] p-4 sm:p-7
+            className={`shrink-0 rounded-2xl border border-foreground/[0.07] bg-foreground/[0.015] p-4 sm:p-5
               transition-all duration-700 ${metricsRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
             style={{ transitionDelay: "320ms" }}
           >
-            <p className="font-display text-base sm:text-xl font-bold tracking-[0.15em] uppercase text-foreground/70 mb-3 sm:mb-5">The Bigstrum Impact</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8">
+            <p className="font-display text-sm sm:text-base font-bold tracking-[0.15em] uppercase text-foreground/70 mb-2 sm:mb-3">The Bigstrum Impact</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
               {metrics.map(({ value, label, sub, pct }, i) => (
-                <div key={label} className="flex flex-col gap-2 sm:gap-3">
-                  <div className="flex sm:flex-col sm:gap-1 items-center sm:items-start justify-between gap-2">
+                <div key={label} className="flex flex-col gap-1.5">
+                  <div className="flex sm:flex-col sm:gap-0.5 items-center sm:items-start justify-between gap-2">
                     <div>
-                      <p className="text-xs sm:text-sm text-foreground/55 font-medium leading-tight">{label}</p>
+                      <p className="text-xs text-foreground/55 font-medium leading-tight">{label}</p>
                       <p className="hidden sm:block text-[10px] font-mono text-foreground/30 mt-0.5">{sub}</p>
                     </div>
-                    <span className="font-display text-2xl sm:text-4xl font-bold text-primary shrink-0 leading-none">{value}</span>
+                    <span className="font-display text-2xl sm:text-3xl font-bold text-primary shrink-0 leading-none">{value}</span>
                   </div>
                   <div className="w-full h-1.5 rounded-full bg-foreground/[0.08]">
                     <div
@@ -173,7 +173,7 @@ export function ArchitectureSection() {
                 </div>
               ))}
             </div>
-            <p className="mt-3 sm:mt-5 text-[10px] font-mono text-foreground/30 italic">
+            <p className="mt-2 text-[10px] font-mono text-foreground/30 italic">
               *Averages based on 2025–2026 enterprise modernization audits.
             </p>
           </div>

@@ -104,7 +104,7 @@ export function ContactSection() {
       id="contact"
       className="snap-section relative bg-background flex flex-col overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 pb-0 sm:min-h-0">
+      <div className="section-inner max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 pb-0 sm:min-h-0">
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-2 sm:mb-6 shrink-0">

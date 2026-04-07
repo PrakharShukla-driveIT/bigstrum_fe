@@ -67,7 +67,7 @@ export function AboutSection() {
       id="about"
       className="snap-section relative bg-primary overflow-hidden flex flex-col"
     >
-      <div className={`max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-24 pb-5 sm:pb-8 ${expanded ? "overflow-y-auto" : "overflow-hidden"}`}>
+      <div className={`section-inner max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-20 pb-4 sm:pb-6 ${expanded ? "overflow-y-auto" : "overflow-hidden"}`}>
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-4 sm:mb-5 shrink-0">

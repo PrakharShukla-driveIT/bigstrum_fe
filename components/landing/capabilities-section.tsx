@@ -185,7 +185,7 @@ export function CapabilitiesSection() {
       id="capabilities"
       className="snap-section relative bg-primary overflow-hidden flex flex-col"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col min-h-0 pt-16 sm:pt-20 pb-2 sm:pb-5">
+      <div className="section-inner max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col min-h-0 pt-16 sm:pt-20 pb-2 sm:pb-5">
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-1 sm:mb-3 shrink-0">

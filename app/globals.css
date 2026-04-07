@@ -126,19 +126,55 @@
 }
 
 /*
- * Section height — declared OUTSIDE @layer so it beats all layered rules.
- * This is required for flex-1 chains inside sections to resolve correctly.
+ * Section height — outside @layer + !important = beats everything including
+ * Tailwind utilities. Required so flex-1 chains inside sections resolve.
  */
 .snap-section {
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
+  height: 100vh !important;
+  height: 100dvh !important;
+  overflow: hidden !important;
 }
 @media (max-width: 1023px) {
   .snap-section {
     height: auto !important;
-    min-height: 100svh;
+    min-height: 100svh !important;
     overflow: visible !important;
+  }
+}
+
+/*
+ * Windows 16:9 / short viewport compact mode.
+ * At ≤780px viewport height (typical Windows 1366×768 / 1920×1080 at 125% DPI),
+ * reduce vertical padding and heading sizes so content fits in 100dvh.
+ */
+@media (min-width: 1024px) and (max-height: 780px) {
+  .snap-section .section-inner {
+    padding-top: 12px !important;
+    padding-bottom: 4px !important;
+  }
+
+  /* Tighten gap between section label + header + body */
+  .snap-section .section-inner > * {
+    margin-bottom: 0 !important;
+  }
+
+  /* Shrink display headings */
+  .snap-section h2 {
+    font-size: clamp(1.4rem, 2.8vw, 2.2rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Tighten all gap utilities inside sections */
+  .snap-section .gap-4 { gap: 8px !important; }
+  .snap-section .gap-5 { gap: 10px !important; }
+  .snap-section .gap-6 { gap: 10px !important; }
+  .snap-section .gap-8 { gap: 12px !important; }
+  .snap-section .sm\:gap-5 { gap: 10px !important; }
+  .snap-section .sm\:gap-8 { gap: 12px !important; }
+
+  /* Architecture: reduce metrics padding */
+  .snap-section [class*="sm:p-7"] {
+    padding: 12px !important;
   }
 }
 
