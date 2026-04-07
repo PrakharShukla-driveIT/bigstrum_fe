@@ -123,21 +123,22 @@
     overflow-wrap: break-word;
   }
 
-  /* Sections: full viewport height so flex-1 layout resolves correctly */
-  .snap-section {
-    height: 100vh;
-    height: 100dvh;
-    max-width: 100%;
-    overflow: hidden;
-  }
+}
 
-  /* Mobile: natural height, no overflow clip */
-  @media (max-width: 1023px) {
-    .snap-section {
-      height: auto;
-      min-height: 100svh;
-      overflow: visible;
-    }
+/*
+ * Section height — declared OUTSIDE @layer so it beats all layered rules.
+ * This is required for flex-1 chains inside sections to resolve correctly.
+ */
+.snap-section {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+@media (max-width: 1023px) {
+  .snap-section {
+    height: auto !important;
+    min-height: 100svh;
+    overflow: visible !important;
   }
 }
 
