@@ -7,14 +7,15 @@ import { ArchitectureSection } from "@/components/landing/architecture-section";
 import { AboutSection } from "@/components/landing/about-section";
 import { ContactSection } from "@/components/landing/contact-section";
 import { ScrollAnimations } from "@/components/landing/scroll-animations";
+import { LenisProvider } from "@/components/landing/lenis-provider";
 
 export default function Home() {
   return (
     <>
+      <LenisProvider />
       <ScrollAnimations />
       <Navigation />
-      {/* Explicit scroll container — scroll-snap-type lives here, not on html/body */}
-      <div id="snap-container">
+      <main>
         <HeroSection />
         <CaseStudiesSection />
         <BlogsSection />
@@ -22,7 +23,7 @@ export default function Home() {
         <ArchitectureSection />
         <AboutSection />
         <ContactSection />
-      </div>
+      </main>
     </>
   );
 }

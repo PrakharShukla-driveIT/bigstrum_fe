@@ -8,85 +8,75 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function ScrollAnimations() {
   useEffect(() => {
-    // Wait one frame so the snap-container is in the DOM and sections are mounted
-    const raf = requestAnimationFrame(() => {
-      const container = document.getElementById("snap-container");
-      if (!container) return;
+    // ── Sync scroll progress bar ──────────────────────────────────────────────
+    const updateProgress = () => {
+      const el = document.getElementById("scroll-progress-bar");
+      if (!el) return;
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      el.style.transform = `scaleX(${total > 0 ? scrolled / total : 0})`;
+    };
+    window.addEventListener("scroll", updateProgress, { passive: true });
 
-      // Tell ScrollTrigger to use the snap container, not the window
-      ScrollTrigger.defaults({ scroller: container });
+    const ctx = gsap.context(() => {
 
-      // ── Sync scroll progress bar ────────────────────────────────────────────
-      const updateProgress = () => {
-        const el = document.getElementById("scroll-progress-bar");
-        if (!el) return;
-        const ratio = container.scrollTop / (container.scrollHeight - container.clientHeight);
-        el.style.transform = `scaleX(${ratio})`;
-      };
-      container.addEventListener("scroll", updateProgress, { passive: true });
+      // ── Hero content exit ───────────────────────────────────────────────────
+      const heroContent = document.querySelector("[data-gsap-hero-content]");
+      if (heroContent) {
+        gsap.to(heroContent, {
+          y: -80,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "[data-gsap-hero]",
+            start: "50% top",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      }
 
-      const ctx = gsap.context(() => {
-
-        // ── Hero content exit ─────────────────────────────────────────────────
-        const heroContent = document.querySelector("[data-gsap-hero-content]");
-        if (heroContent) {
-          gsap.to(heroContent, {
-            y: -80,
-            opacity: 0,
-            ease: "none",
+      // ── Section divider lines grow ──────────────────────────────────────────
+      gsap.utils
+        .toArray<HTMLElement>("section[id] [data-divider]")
+        .forEach((line) => {
+          gsap.from(line, {
+            scaleX: 0,
+            transformOrigin: "left center",
+            ease: "power2.out",
             scrollTrigger: {
-              trigger: "[data-gsap-hero]",
-              start: "50% top",
-              end: "bottom top",
+              trigger: line.closest("section") ?? line,
+              start: "top 85%",
+              end: "top 55%",
               scrub: 1,
             },
           });
-        }
+        });
 
-        // ── Section divider lines grow ────────────────────────────────────────
-        gsap.utils
-          .toArray<HTMLElement>("section[id] [data-divider]")
-          .forEach((line) => {
-            gsap.from(line, {
-              scaleX: 0,
-              transformOrigin: "left center",
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: line.closest("section") ?? line,
-                start: "top 85%",
-                end: "top 55%",
-                scrub: 1,
-              },
-            });
+      // ── Section label text slide-in ─────────────────────────────────────────
+      gsap.utils
+        .toArray<HTMLElement>("section[id] [data-section-label]")
+        .forEach((label) => {
+          gsap.from(label, {
+            x: -24,
+            opacity: 0,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: label.closest("section") ?? label,
+              start: "top 85%",
+              end: "top 60%",
+              scrub: 1,
+            },
           });
+        });
 
-        // ── Section label text slide-in ───────────────────────────────────────
-        gsap.utils
-          .toArray<HTMLElement>("section[id] [data-section-label]")
-          .forEach((label) => {
-            gsap.from(label, {
-              x: -24,
-              opacity: 0,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: label.closest("section") ?? label,
-                start: "top 85%",
-                end: "top 60%",
-                scrub: 1,
-              },
-            });
-          });
-
-        ScrollTrigger.refresh();
-      });
-
-      return () => {
-        ctx.revert();
-        container.removeEventListener("scroll", updateProgress);
-      };
+      ScrollTrigger.refresh();
     });
 
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      ctx.revert();
+      window.removeEventListener("scroll", updateProgress);
+    };
   }, []);
 
   return (

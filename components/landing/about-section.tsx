@@ -9,8 +9,7 @@ function useInView(threshold = 0.05) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const isMobile = window.innerWidth < 1024;
-    const root = isMobile ? null : (document.getElementById("snap-container") ?? null);
+    const root = null;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
       { threshold, root }
@@ -67,7 +66,6 @@ export function AboutSection() {
     <section
       id="about"
       className="snap-section relative bg-primary overflow-hidden flex flex-col"
-      style={{ height: '100dvh' }}
     >
       <div className={`max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-24 pb-5 sm:pb-8 ${expanded ? "overflow-y-auto" : "overflow-hidden"}`}>
 
@@ -89,29 +87,28 @@ export function AboutSection() {
               Engineering for industries where failure is not an option.
             </h2>
             <p className="text-white/55 text-sm sm:text-base">
-              In high-stakes environments, software cannot break, lag, or fail silently.
-We engineer systems that are secure, scalable, and built to withstand real-world complexity—across cybersecurity, healthcare, government, and enterprise.
+              In high-stakes environments, software cannot break, lag, or fail silently. We engineer systems that are secure, scalable, and built to withstand real-world complexity—across cybersecurity, healthcare, government, and enterprise.
             </p>
           </div>
 
-          {/* What We Build + Our Approach */}
+          {/* What We Build + Our Approach — flex-1 + min-h-0 so it shrinks at high zoom */}
           <div
             ref={body.ref}
-            className={`shrink-0 grid grid-cols-2 gap-2 sm:gap-6 transition-all duration-700 ${body.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+            className={`flex-1 min-h-0 grid grid-cols-2 gap-2 sm:gap-6 overflow-hidden transition-all duration-700 ${body.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           >
             {/* What We Build */}
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col min-h-0">
               <span className="font-mono text-[9px] sm:text-[10px] tracking-widest text-white/50 uppercase block mb-2 sm:mb-3 shrink-0">What We Build</span>
-              <div className="flex flex-col gap-2 sm:gap-3 flex-1">
+              <div className="flex flex-col gap-2 sm:gap-3 flex-1 min-h-0 overflow-hidden">
                 {buildItems.map(({ title, tag, desc }, i) => (
                   <div
                     key={title}
-                    className="border border-white/12 rounded-xl bg-white/[0.05] px-3 py-3 sm:px-5 sm:py-5 flex flex-col gap-1 sm:gap-2 flex-1 hover:bg-white/[0.09] transition-colors duration-300"
+                    className="border border-white/12 rounded-xl bg-white/[0.05] px-3 py-3 sm:px-5 sm:py-5 flex flex-col gap-1 sm:gap-2 flex-1 min-h-0 overflow-hidden hover:bg-white/[0.09] transition-colors duration-300"
                     style={{ transitionDelay: `${i * 60}ms` }}
                   >
-                    <span className="font-mono text-[8px] sm:text-[9px] tracking-widest text-white/35 uppercase">{tag}</span>
-                    <p className="text-white font-semibold text-sm sm:text-lg leading-snug">{title}</p>
-                    <p className="text-white/55 text-[11px] sm:text-sm leading-relaxed hidden sm:block">{desc}</p>
+                    <span className="font-mono text-[8px] sm:text-[9px] tracking-widest text-white/35 uppercase shrink-0">{tag}</span>
+                    <p className="text-white font-semibold text-sm sm:text-lg leading-snug shrink-0">{title}</p>
+                    <p className="text-white/55 text-[11px] sm:text-sm leading-relaxed hidden sm:block overflow-hidden">{desc}</p>
                     <p className="text-white/55 text-[11px] leading-snug sm:hidden line-clamp-2">{desc}</p>
                   </div>
                 ))}
@@ -119,19 +116,19 @@ We engineer systems that are secure, scalable, and built to withstand real-world
             </div>
 
             {/* Our Approach */}
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col min-h-0">
               <span className="font-mono text-[9px] sm:text-[10px] tracking-widest text-white/50 uppercase block mb-2 sm:mb-3 shrink-0">Our Approach</span>
-              <div className="flex flex-col gap-2 sm:gap-3 flex-1">
+              <div className="flex flex-col gap-2 sm:gap-3 flex-1 min-h-0 overflow-hidden">
                 {approachSteps.map(({ step, title, desc }, i) => (
                   <div
                     key={step}
-                    className="border border-white/12 rounded-xl bg-white/[0.05] px-3 py-3 sm:px-5 sm:py-5 flex gap-2 sm:gap-4 flex-1 hover:bg-white/[0.09] transition-colors duration-300"
+                    className="border border-white/12 rounded-xl bg-white/[0.05] px-3 py-3 sm:px-5 sm:py-5 flex gap-2 sm:gap-4 flex-1 min-h-0 overflow-hidden hover:bg-white/[0.09] transition-colors duration-300"
                     style={{ transitionDelay: `${i * 60 + 180}ms` }}
                   >
                     <span className="font-mono text-[9px] sm:text-xs text-white/30 mt-0.5 shrink-0">{step}</span>
-                    <div className="flex flex-col gap-1 sm:gap-2">
-                      <p className="text-white font-semibold text-sm sm:text-lg leading-snug">{title}</p>
-                      <p className="text-white/55 text-[11px] sm:text-sm leading-relaxed hidden sm:block">{desc}</p>
+                    <div className="flex flex-col gap-1 sm:gap-2 min-h-0 overflow-hidden">
+                      <p className="text-white font-semibold text-sm sm:text-lg leading-snug shrink-0">{title}</p>
+                      <p className="text-white/55 text-[11px] sm:text-sm leading-relaxed hidden sm:block overflow-hidden">{desc}</p>
                       <p className="text-white/55 text-[11px] leading-snug sm:hidden line-clamp-2">{desc}</p>
                     </div>
                   </div>

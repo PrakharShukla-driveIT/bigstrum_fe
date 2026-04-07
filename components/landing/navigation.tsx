@@ -37,24 +37,13 @@ export function Navigation() {
   const tweenRefs   = useRef<Array<gsap.core.Tween | null>>([]);
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 1024;
-    if (isMobile) {
-      const onScroll = () => setIsScrolled(window.scrollY > 80);
-      window.addEventListener('scroll', onScroll, { passive: true });
-      return () => window.removeEventListener('scroll', onScroll);
-    }
-    const container = document.getElementById('snap-container');
-    if (!container) return;
-    const onScroll = () => setIsScrolled(container.scrollTop > 80);
-    container.addEventListener('scroll', onScroll, { passive: true });
-    return () => container.removeEventListener('scroll', onScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 80);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   // Active section via IntersectionObserver — uses snap container on desktop, viewport on mobile
   useEffect(() => {
-    const isMobile = window.innerWidth < 1024;
-    const container = isMobile ? null : document.getElementById('snap-container');
-
     const sectionIds = ['hero', 'case-studies', 'capabilities', 'articles', 'technology', 'ai', 'about', 'contact'];
     const observers: IntersectionObserver[] = [];
 
@@ -67,7 +56,7 @@ export function Navigation() {
             setActiveSection(id);
           }
         },
-        { root: container, threshold: [0.4] }
+        { root: null, threshold: [0.4] }
       );
       obs.observe(el);
       observers.push(obs);
@@ -76,13 +65,20 @@ export function Navigation() {
     return () => observers.forEach((obs) => obs.disconnect());
   }, []);
 
-  // Smooth scroll to section on nav click
+  // Smooth scroll to section on nav click — use Lenis if available
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
       e.preventDefault();
       const target = document.getElementById(sectionId);
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        import('./lenis-provider').then(({ getLenis }) => {
+          const lenis = getLenis();
+          if (lenis) {
+            lenis.scrollTo(target as HTMLElement, { offset: 0 });
+          } else {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
       }
       setMobileOpen(false);
     },
@@ -93,15 +89,8 @@ export function Navigation() {
   useEffect(() => {
     if (!mobileOpen) return;
     const close = () => setMobileOpen(false);
-    const isMobile = window.innerWidth < 1024;
-    if (isMobile) {
-      window.addEventListener('scroll', close, { passive: true, once: true });
-      return () => window.removeEventListener('scroll', close);
-    }
-    const container = document.getElementById('snap-container');
-    if (!container) return;
-    container.addEventListener('scroll', close, { passive: true, once: true });
-    return () => container.removeEventListener('scroll', close);
+    window.addEventListener('scroll', close, { passive: true, once: true });
+    return () => window.removeEventListener('scroll', close);
   }, [mobileOpen]);
 
   // Prevent body scroll when mobile menu is open
@@ -243,7 +232,7 @@ export function Navigation() {
                     onClick={(e) => handleNavClick(e, link.sectionId)}
                     style={{
                       fontSize: '13px',
-                      fontFamily: 'monospace',
+                      fontFamily: 'var(--font-mono, JetBrains Mono, monospace)',
                       letterSpacing: '0.12em',
                       textTransform: 'uppercase',
                       textDecoration: 'none',
@@ -277,7 +266,7 @@ export function Navigation() {
                     alignItems: 'center',
                     gap: '4px',
                     fontSize: '13px',
-                    fontFamily: 'monospace',
+                    fontFamily: 'var(--font-mono, JetBrains Mono, monospace)',
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
                     background: 'none',
@@ -332,7 +321,7 @@ export function Navigation() {
                         padding: '9px 14px',
                         borderRadius: '9px',
                         fontSize: '13px',
-                        fontFamily: 'monospace',
+                        fontFamily: 'var(--font-mono, JetBrains Mono, monospace)',
                         letterSpacing: '0.08em',
                         textTransform: 'uppercase',
                         textDecoration: 'none',
@@ -502,7 +491,7 @@ export function Navigation() {
                     background: isActive ? 'oklch(0.43 0.14 25)' : '#f0ede8',
                     color: isActive ? '#ffffff' : '#1a1816',
                     fontSize: '12px',
-                    fontFamily: 'monospace',
+                    fontFamily: 'var(--font-mono, JetBrains Mono, monospace)',
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
                     textDecoration: 'none',
@@ -545,6 +534,7 @@ export function Navigation() {
                         display: 'inline-block',
                         color: '#ffffff',
                         zIndex: 3,
+                        opacity: 0, /* hidden until GSAP initialises — prevents text overlap on slow machines */
                       }}
                     >
                       {link.name}
@@ -576,7 +566,7 @@ export function Navigation() {
                   background: productsOpen ? 'oklch(0.43 0.14 25)' : '#f0ede8',
                   color: productsOpen ? '#ffffff' : '#1a1816',
                   fontSize: '12px',
-                  fontFamily: 'monospace',
+                  fontFamily: 'var(--font-mono, JetBrains Mono, monospace)',
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
                   border: 'none',
@@ -627,7 +617,7 @@ export function Navigation() {
                       padding: '9px 14px',
                       borderRadius: '9px',
                       fontSize: '12px',
-                      fontFamily: 'monospace',
+                      fontFamily: 'var(--font-mono, JetBrains Mono, monospace)',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       textDecoration: 'none',
@@ -770,7 +760,7 @@ export function Navigation() {
                   style={{
                     display: 'block',
                     padding: '10px 16px',
-                    fontFamily: 'monospace',
+                    fontFamily: 'var(--font-mono, JetBrains Mono, monospace)',
                     fontSize: '14px',
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase',

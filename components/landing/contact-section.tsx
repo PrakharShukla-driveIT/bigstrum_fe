@@ -10,8 +10,7 @@ function useInView(threshold = 0.1) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const isMobile = window.innerWidth < 1024;
-    const root = isMobile ? null : (document.getElementById("snap-container") ?? null);
+    const root = null;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
       { threshold, root }
@@ -103,7 +102,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="snap-section relative bg-background flex flex-col"
+      className="snap-section relative bg-background flex flex-col overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 pb-0 sm:min-h-0">
 
@@ -146,7 +145,7 @@ export function ContactSection() {
         <div ref={header.ref} className="grid lg:grid-cols-12 gap-6 lg:gap-14 sm:flex-1 sm:min-h-0">
 
           {/* Left — desktop only */}
-          <div className={`hidden lg:flex lg:col-span-5 flex-col gap-5 transition-all duration-700 ${
+          <div className={`hidden lg:flex lg:col-span-5 flex-col gap-5 min-h-0 overflow-hidden transition-all duration-700 ${
               header.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
@@ -193,7 +192,7 @@ export function ContactSection() {
           {/* Right: Form */}
           <div
             ref={form.ref}
-            className={`lg:col-span-7 flex flex-col sm:min-h-0 transition-all duration-700 delay-150 ${
+            className={`lg:col-span-7 flex flex-col sm:min-h-0 overflow-hidden transition-all duration-700 delay-150 ${
               form.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >

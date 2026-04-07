@@ -53,8 +53,7 @@ function useInView(threshold = 0.1) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const isMobile = window.innerWidth < 1024;
-    const root = isMobile ? null : (document.getElementById("snap-container") ?? null);
+    const root = null;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
       { threshold, root }
@@ -72,8 +71,7 @@ export function ArchitectureSection() {
   const metricsRef = useInView();
 
   useEffect(() => {
-    const container = document.getElementById("snap-container");
-    const scroller  = container ?? undefined;
+    const scroller  = undefined;
     const ctx = gsap.context(() => {
       if (headerRef.current) {
         gsap.fromTo(
@@ -92,9 +90,8 @@ export function ArchitectureSection() {
       ref={sectionRef}
       id="architecture"
       className="snap-section relative bg-background border-t border-foreground/10 overflow-hidden flex flex-col"
-      style={{ height: "100dvh" }}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-24 pb-4 sm:pb-8 min-h-0">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-24 pb-4 sm:pb-8 min-h-0" style={{ minHeight: 0 }}>
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-2 sm:mb-4 shrink-0">
@@ -119,36 +116,34 @@ export function ArchitectureSection() {
         {/* Body — flex-1 fills remaining height */}
         <div className="flex-1 flex flex-col min-h-0 gap-3 sm:gap-5">
 
-          {/* Architecture layers — relative wrapper takes all flex space, grid fills it absolutely */}
-          <div ref={grid.ref} className="flex-1 min-h-0 relative">
-            <div className="absolute inset-0 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-              {layers.map((layer, li) => (
-                <div
-                  key={layer.label}
-                  className={`rounded-2xl border border-foreground/[0.07] bg-foreground/[0.015] p-4 sm:p-5 h-full flex flex-col
-                    transition-all duration-700
-                    ${grid.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                  style={{ transitionDelay: `${li * 80}ms` }}
-                >
-                  <p className="font-mono text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-foreground/35 mb-3 sm:mb-4 shrink-0">
-                    {layer.label}
-                  </p>
-                  <div className="flex flex-col flex-1 gap-2 sm:gap-3">
-                    {layer.items.map(({ icon: Icon, name, note }) => (
-                      <div key={name} className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-background border border-foreground/[0.06] flex-1">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-foreground/[0.04] border border-foreground/[0.07] flex items-center justify-center shrink-0">
-                          <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-foreground/45" />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-sm sm:text-base font-bold text-foreground/80 leading-tight">{name}</p>
-                          <p className="text-[10px] sm:text-[11px] font-mono text-foreground/35 leading-tight mt-0.5">{note}</p>
-                        </div>
+          {/* Architecture layers grid — flex-1 so it takes remaining height */}
+          <div ref={grid.ref} className="flex-1 min-h-0 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+            {layers.map((layer, li) => (
+              <div
+                key={layer.label}
+                className={`rounded-2xl border border-foreground/[0.07] bg-foreground/[0.015] p-4 sm:p-5 flex flex-col
+                  transition-all duration-700
+                  ${grid.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                style={{ transitionDelay: `${li * 80}ms` }}
+              >
+                <p className="font-mono text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-foreground/35 mb-3 sm:mb-4 shrink-0">
+                  {layer.label}
+                </p>
+                <div className="flex flex-col flex-1 gap-2 sm:gap-3">
+                  {layer.items.map(({ icon: Icon, name, note }) => (
+                    <div key={name} className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-background border border-foreground/[0.06] flex-1">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-foreground/[0.04] border border-foreground/[0.07] flex items-center justify-center shrink-0">
+                        <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-foreground/45" />
                       </div>
-                    ))}
-                  </div>
+                      <div className="min-w-0">
+                        <p className="text-sm sm:text-base font-bold text-foreground/80 leading-tight">{name}</p>
+                        <p className="text-[10px] sm:text-[11px] font-mono text-foreground/35 leading-tight mt-0.5">{note}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
 
           {/* Impact metrics — fixed height at bottom */}

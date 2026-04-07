@@ -98,7 +98,7 @@ function CapabilityCard({
       onMouseMove={spotlight.onMouseMove}
       onMouseEnter={spotlight.onMouseEnter}
       onMouseLeave={spotlight.onMouseLeave}
-      className="cap-card relative rounded-2xl border border-white/20 bg-white p-3 md:p-5 flex flex-col gap-2 md:gap-4 overflow-hidden
+      className="cap-card relative rounded-2xl border border-white/20 bg-white p-3 md:p-5 flex flex-col gap-2 md:gap-4 overflow-hidden min-h-0
         hover:-translate-y-1 hover:shadow-xl hover:shadow-black/25 hover:border-white/40
         transition-all duration-500"
     >
@@ -149,8 +149,7 @@ export function CapabilitiesSection() {
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const container = document.getElementById("snap-container");
-    const scroller = container ?? undefined;
+    const scroller = undefined;
     const ctx = gsap.context(() => {
       if (headerRef.current) {
         gsap.fromTo(
@@ -185,20 +184,19 @@ export function CapabilitiesSection() {
       ref={sectionRef}
       id="capabilities"
       className="snap-section relative bg-primary overflow-hidden flex flex-col"
-      style={{ height: "100dvh" }}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-24 pb-2 sm:pb-7">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col min-h-0 pt-16 sm:pt-20 pb-2 sm:pb-5">
 
         {/* Section label */}
-        <div className="flex items-center gap-4 mb-1 sm:mb-5 shrink-0">
+        <div className="flex items-center gap-4 mb-1 sm:mb-3 shrink-0">
           <span data-section-label className="font-mono text-sm tracking-[0.2em] text-white/70 uppercase">What We Build</span>
           <div data-divider className="flex-1 h-px bg-white/15" />
         </div>
 
         {/* Header */}
-        <div ref={headerRef} className="grid lg:grid-cols-12 gap-4 lg:gap-8 mb-2 sm:mb-6 shrink-0">
+        <div ref={headerRef} className="grid lg:grid-cols-12 gap-4 lg:gap-8 mb-2 sm:mb-4 shrink-0">
           <div className="lg:col-span-6">
-            <h2 className="font-display text-2xl md:text-4xl lg:text-5xl tracking-tight text-white leading-[1.05]">
+            <h2 className="font-display text-2xl md:text-4xl lg:text-4xl xl:text-5xl tracking-tight text-white leading-[1.05]">
               Our Capabilities
             </h2>
           </div>
@@ -209,10 +207,13 @@ export function CapabilitiesSection() {
           </div>
         </div>
 
-        {/* Cards grid — 2 cols mobile, 4 cols desktop */}
+        {/* Cards grid — fluid auto-fill columns (min 260px), equal-height rows fill remaining space */}
         <div
           ref={gridRef}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 flex-1 min-h-0 overflow-y-auto"
+          className="cap-cards-grid grid gap-2 sm:gap-3 flex-1 min-h-0 overflow-hidden"
+          style={{
+            gridAutoRows: '1fr',                          /* equal-height rows, determined by grid height */
+          }}
         >
           {capabilities.map((cap, i) => (
             <CapabilityCard key={cap.title} {...cap} index={i} />

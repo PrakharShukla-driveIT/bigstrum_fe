@@ -46,7 +46,7 @@ export function CaseStudiesSection() {
       id="case-studies"
       className="snap-section relative bg-primary overflow-hidden flex flex-col"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-24 pb-2 sm:pb-7">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 sm:pt-20 pb-2 sm:pb-5">
 
         {/* Section label */}
         <div className="flex items-center gap-4 mb-2 sm:mb-4 shrink-0">
@@ -62,7 +62,7 @@ export function CaseStudiesSection() {
         {/* Header */}
         <div className="grid lg:grid-cols-12 gap-4 lg:gap-8 mb-2 sm:mb-5 shrink-0">
           <div className="lg:col-span-7">
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl tracking-tight text-white leading-[1.05]">
+            <h2 className="font-display text-3xl md:text-4xl lg:text-4xl xl:text-5xl tracking-tight text-white leading-[1.05]">
               Proven Solutions Across Industries
             </h2>
           </div>
@@ -92,7 +92,7 @@ export function CaseStudiesSection() {
                 <div className="absolute inset-0 grid lg:grid-cols-12 bg-background border border-foreground/8 rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.1)]">
 
                   {/* Left — main content */}
-                  <div className="lg:col-span-8 p-4 sm:p-7 lg:p-10 flex flex-col gap-2.5 sm:gap-4 lg:gap-5 border-b lg:border-b-0 lg:border-r border-foreground/8 overflow-hidden">
+                  <div className="lg:col-span-8 p-4 sm:p-6 lg:p-6 flex flex-col gap-2 sm:gap-3 border-b lg:border-b-0 lg:border-r border-foreground/8 overflow-hidden min-h-0">
 
                     {/* Tags */}
                     <div className="flex items-center gap-2 shrink-0 flex-wrap">
@@ -106,25 +106,22 @@ export function CaseStudiesSection() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-display text-lg sm:text-2xl md:text-3xl lg:text-[2.25rem] text-foreground font-semibold leading-[1.15] tracking-tight shrink-0">
+                    <h3 className="font-display text-lg sm:text-2xl md:text-3xl lg:text-2xl xl:text-3xl text-foreground font-semibold leading-[1.15] tracking-tight shrink-0">
                       {cs.title}
                     </h3>
 
                     {/* Metric */}
-                    <div className="flex items-start gap-3 px-3 py-1.5 sm:py-3 rounded-xl bg-primary/5 border-l-2 border-primary shrink-0">
+                    <div className="flex items-start gap-3 px-3 py-1.5 rounded-xl bg-primary/5 border-l-2 border-primary shrink-0">
                       <span className="text-primary text-lg leading-none mt-0.5">↗</span>
                       <p className="text-sm font-semibold text-foreground/80 leading-snug">{cs.metric}</p>
                     </div>
 
-                    {/* Overview */}
-                    <p className="hidden lg:block text-sm text-foreground/55 leading-relaxed shrink-0 line-clamp-2">{cs.overview}</p>
-
                     {/* Challenge / Solution */}
-                    <div className="hidden lg:grid grid-cols-2 gap-5 flex-1 min-h-0">
+                    <div className="hidden lg:grid grid-cols-2 gap-4 flex-1 min-h-0 overflow-hidden">
                       <div className="overflow-hidden">
                         <p className="font-mono text-[10px] tracking-widest uppercase mb-2 font-bold text-primary/80 bg-primary/6 border border-primary/15 inline-block px-2 py-0.5 rounded">Challenge</p>
-                        <p className="text-sm text-foreground/60 leading-relaxed line-clamp-4">{cs.problem}</p>
-                        <ul className="mt-3 flex flex-col gap-1.5">
+                        <p className="text-sm text-foreground/60 leading-relaxed line-clamp-3">{cs.problem}</p>
+                        <ul className="mt-2 flex flex-col gap-1">
                           {cs.challenges.slice(0, 2).map((c, i) => (
                             <li key={i} className="flex items-start gap-2">
                               <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-foreground/25" />
@@ -149,30 +146,30 @@ export function CaseStudiesSection() {
                   </div>
 
                   {/* Right — outcomes panel */}
-                  <div className="lg:col-span-4 relative p-4 sm:p-7 lg:p-10 flex flex-col overflow-hidden bg-foreground/[0.015]">
+                  <div className="lg:col-span-4 relative p-4 sm:p-6 lg:p-8 flex flex-col overflow-hidden bg-foreground/[0.015]">
 
                     {/* Decorative number */}
                     <p className="absolute -top-2 -right-2 font-display text-[7rem] lg:text-[9rem] leading-none font-bold text-foreground opacity-[0.04] select-none pointer-events-none">
                       {cs.number}
                     </p>
 
-                    {/* Outcomes */}
-                    <div className="flex flex-col lg:flex-1 lg:min-h-0">
-                      <p className="font-mono text-[10px] tracking-widest uppercase mb-2 sm:mb-3 shrink-0 font-bold text-primary/80 bg-primary/6 border border-primary/15 inline-block px-2 py-0.5 rounded self-start">Key Outcomes</p>
-                      <ul className="flex flex-col gap-2 lg:flex-1 lg:justify-between lg:gap-0">
+                    {/* Outcomes — flex-1 + min-h-0; items use consistent gap, not justify-between */}
+                    <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+                      <p className="font-mono text-[10px] tracking-widest uppercase mb-2 shrink-0 font-bold text-primary/80 bg-primary/6 border border-primary/15 inline-block px-2 py-0.5 rounded self-start">Key Outcomes</p>
+                      <ul className="flex flex-col flex-1 min-h-0 overflow-hidden justify-between">
                         {cs.outcomes.map((outcome, i) => (
-                          <li key={i} className="flex items-start gap-3 py-1.5 sm:py-2.5 border-b border-foreground/6 last:border-0">
+                          <li key={i} className="flex items-start gap-3 py-1.5 border-b border-foreground/6 last:border-0 min-h-0 shrink">
                             <span className="shrink-0 mt-0.5 font-mono text-[10px] font-bold text-primary bg-primary/8 border border-primary/20 w-5 h-5 rounded flex items-center justify-center leading-none">
                               {i + 1}
                             </span>
-                            <p className="text-sm text-foreground/60 leading-snug">{outcome}</p>
+                            <p className="text-sm text-foreground/60 leading-snug line-clamp-2 min-w-0">{outcome}</p>
                           </li>
                         ))}
                       </ul>
                     </div>
 
                     {/* Bottom: type + CTA */}
-                    <div className="mt-3 sm:mt-4 flex flex-col gap-2 sm:gap-3 shrink-0">
+                    <div className="mt-2 sm:mt-3 flex flex-col gap-2 shrink-0">
                       <div className="flex items-center gap-2 pt-3 border-t border-foreground/8">
                         <span className="font-mono text-[10px] tracking-widest text-foreground/35 uppercase">Type</span>
                         <span className="text-foreground/15">·</span>

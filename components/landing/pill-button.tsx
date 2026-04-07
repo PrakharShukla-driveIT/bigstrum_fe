@@ -144,6 +144,7 @@ export function PillButton({
             color: hoverTextColor,
             zIndex: 3,
             whiteSpace: "nowrap",
+            opacity: 0, /* hidden until GSAP initialises — prevents text overlap on slow machines */
           }}
         >
           {children}

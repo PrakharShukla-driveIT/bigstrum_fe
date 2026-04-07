@@ -8,6 +8,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── Cross-platform base reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  min-width: 0; /* Prevent flex/grid blowout on Windows */
+}
+
 :root {
   --background: oklch(0.985 0.002 90);
   --foreground: oklch(0.12 0.01 60);
@@ -91,45 +97,46 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    /* Reserve scrollbar space on Windows — prevents layout shift when scrollbar appears */
+    scrollbar-gutter: stable;
+    /* Prevent browser from auto-scaling text (affects Windows at non-100% zoom) */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
     overflow-x: hidden;
-  }
-  /* Explicit full-page snap container — fixed to viewport so it always owns scroll events */
-  #snap-container {
-    position: fixed;
-    inset: 0;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    scroll-snap-type: y mandatory;
-  }
-
-  /* Mobile: revert to normal body scroll — no fixed container, no snap */
-  @media (max-width: 1023px) {
-    html, body {
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-    #snap-container {
-      position: static;
-      inset: unset;
-      height: auto;
-      overflow: visible;
-      scroll-snap-type: none;
-      scroll-behavior: auto;
-    }
+    /* Reserve scrollbar gutter on body scroll (mobile/Windows) */
+    scrollbar-gutter: stable;
+    /* Cross-platform font rendering consistency */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
   }
 
-  /* Snap section: full-height snapping on desktop only */
+  /* Prevent text from overflowing containers on Windows (fonts render slightly heavier) */
+  h1, h2, h3, h4, h5, h6, p {
+    overflow-wrap: break-word;
+  }
+
+  /* Sections: full viewport height so flex-1 layout resolves correctly */
   .snap-section {
+    height: 100vh;
     height: 100dvh;
-    scroll-snap-align: start;
+    max-width: 100%;
+    overflow: hidden;
   }
+
+  /* Mobile: natural height, no overflow clip */
   @media (max-width: 1023px) {
     .snap-section {
-      height: auto !important;
-      min-height: 100dvh;
-      scroll-snap-align: none;
+      height: auto;
+      min-height: 100svh;
+      overflow: visible;
     }
   }
 }
@@ -281,6 +288,16 @@
   @keyframes loading-bar {
     0% { transform: scaleX(0); }
     100% { transform: scaleX(1); }
+  }
+
+  /* Capabilities grid: fluid auto-fill on desktop, fixed 2-col on mobile */
+  .cap-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 1024px) {
+    .cap-cards-grid {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
   }
 
   .border-sketch {

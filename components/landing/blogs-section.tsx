@@ -18,13 +18,11 @@ export function BlogsSection() {
 
   useEffect(() => {
     if (!sectionRef.current) return;
-    const isMobile = window.innerWidth < 1024;
-    const container = isMobile ? null : document.getElementById("snap-container");
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>("[data-article]").forEach((el) => {
         gsap.from(el, {
           y: 32, opacity: 0, ease: "power3.out",
-          scrollTrigger: { trigger: el, scroller: container ?? undefined, start: "top 90%", end: "top 60%", scrub: 1 },
+          scrollTrigger: { trigger: el, start: "top 90%", end: "top 60%", scrub: 1 },
         });
       });
     }, sectionRef);
@@ -36,7 +34,6 @@ export function BlogsSection() {
       id="articles"
       ref={sectionRef}
       className="snap-section relative bg-background flex flex-col overflow-hidden"
-      style={{ height: '100dvh' }}
     >
       <div className={`max-w-7xl mx-auto px-6 lg:px-10 w-full flex flex-col flex-1 pt-16 sm:pt-24 ${expanded ? "pb-24 sm:pb-8 overflow-y-auto" : "pb-4 sm:pb-8 overflow-hidden"}`}>
 
