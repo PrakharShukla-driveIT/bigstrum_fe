@@ -21,7 +21,10 @@ function useInView(threshold = 0.1) {
   return { ref, inView };
 }
 
-const footerColumns = [
+type FooterLink = { name: string; href: string; badge?: string; };
+type FooterColumn = { title: string; links: FooterLink[]; };
+
+const footerColumns: FooterColumn[] = [
   {
     title: "Services",
     links: [
@@ -102,7 +105,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="snap-section relative bg-background flex flex-col overflow-hidden"
+      className="relative bg-background flex flex-col overflow-hidden min-h-[100dvh]"
     >
       <div className="section-inner max-w-7xl mx-auto px-6 lg:px-10 w-full flex-1 flex flex-col pt-16 pb-0 sm:min-h-0">
 
